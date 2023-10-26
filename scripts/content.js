@@ -1,5 +1,7 @@
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request.action === "changeH1Text") {
+  console.log("here receiving message")
+  if (request.action === "changeText") {
+    console.log("correct action")
     const h1Elements = document.querySelectorAll("h1");
     h1Elements.forEach((element) => {
       element.textContent = "itsa me";
