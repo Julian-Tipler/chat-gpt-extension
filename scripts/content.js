@@ -1,16 +1,9 @@
+console.log("content.js")
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  console.log("here receiving message")
   if (request.action === "changeText") {
-    console.log("correct action")
-    const h1Elements = document.querySelectorAll("h1");
-    h1Elements.forEach((element) => {
-      element.textContent = "itsa me";
-    });
+    const searchBar = document.getElementById("prompt-textarea");
+    if (searchBar) {
+      searchBar.value = request.popupText
+    }
   }
-
-  // const searchBar = document.getElementById("prompt-textarea");
-  // if (searchBar) {
-  //   searchBar.value = "hello world";
-  // } else {
-  // }
 });
