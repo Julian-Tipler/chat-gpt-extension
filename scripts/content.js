@@ -1,4 +1,3 @@
-console.log("content.js");
 
 // Listens for changeText action and changes the text in the target website
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {

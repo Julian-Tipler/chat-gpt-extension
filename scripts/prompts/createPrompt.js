@@ -1,3 +1,5 @@
+import { readAndDisplayPrompts } from "./readAndDisplayPrompts.js";
+
 export async function createPrompt(event) {
   event.preventDefault();
 
@@ -12,12 +14,12 @@ export async function createPrompt(event) {
     const prompts = result.prompts;
 
     // Add the new prompt to the array
-    prompts.push({ name, text });
+    prompts.push({ id: generateId(), name, text });
 
     // Save the updated prompts array to chrome.storage.sync
     chrome.storage.sync.set({ prompts }, function () {
       // Updates prompts
-      fetchAndDisplayPrompts();
+      readAndDisplayPrompts();
     });
 
     // Clear the form inputs
@@ -25,3 +27,9 @@ export async function createPrompt(event) {
     textInput.value = "";
   });
 }
+
+const generateId = () => {
+  const randomNum = Math.random().toString(36).substr(2, 9);
+  console.log(randomNum);
+  return randomNum;
+};
