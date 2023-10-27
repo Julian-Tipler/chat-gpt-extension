@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
   "name": "Reading time",
-  "description": "Add the reading time to Chrome Extension documentation articles",
+  "description": "Insert prompts into chat gpt's text box",
   "version": "1.0",
-  "permissions": ["activeTab"],
+  "permissions": ["activeTab", "storage"],
   "action": {
     "default_popup": "popup.html",
     "default_icon": "icon.png"
