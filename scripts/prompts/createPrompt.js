@@ -3,8 +3,8 @@ import { readAndDisplayPrompts } from "./readAndDisplayPrompts.js";
 export async function createPrompt(event) {
   event.preventDefault();
 
-  const nameInput = document.getElementById("promptName");
-  const textInput = document.getElementById("promptText");
+  const nameInput = document.getElementById("prompt-form-name");
+  const textInput = document.getElementById("prompt-form-text");
 
   const name = nameInput.value;
   const text = textInput.value;
@@ -30,6 +30,5 @@ export async function createPrompt(event) {
 
 const generateId = () => {
   const randomNum = Math.random().toString(36).substr(2, 9);
-  console.log(randomNum);
   return randomNum;
 };

@@ -1,28 +1,109 @@
-/* 
-<html>
-  <head>
-    <link rel="stylesheet" type="text/css" href="popup.css" />
-  </head>
-  <body>
-    <h1>Hello Extensions</h1>
-    <form id="promptForm">
-      <label for="promptName">Name:</label>
-      <input type="text" id="promptName" required />
-      <br />
-      <label for="promptText">Text:</label>
-      <textarea id="promptText" required></textarea>
-      <br />
-      <input type="submit" value="Add Prompt" />
-    </form>
-    <div id="promptsList"></div>
-    <script type="module" src="./scripts/popup.js"></script>
-  </body>
-</html>
- */
+/* popup.css */
 
-.prompt-form {
+/* Defaults */
+
+body {
+  background-color: #444654;
+  color: white;
 }
 
-.prompt-form label {
+h1 {
+  font-size: 24px;
+}
+
+.clickable-button {
+  background-color: white;
+  padding: 0.5em 0.75em;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* High level */
+.main-container {
+  justify-content: center;
+  width: 300px;
+  padding: 20px;
+  background-color: #343541;
+  border: 1px solid #ccc;
+  border-radius: 0.5em;
+}
+
+/* Specific */
+button#show-form-button {
+  padding: 0;
+  background-color: #19c37d;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 1em;
+  height: 1em;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  text-align: center;
+}
+
+#prompt-form {
+  display: none;
+  padding: 1em;
+  border-radius: 0.5em;
+  background-color: #444654;
+}
+
+label {
   display: block;
+  font-weight: bold;
+  margin-right: 0.5em;
+}
+
+#prompt-form-name,
+#prompt-form-text {
+  width: 100%;
+  padding: 5px;
+  margin-top: 0.25em;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+#prompt-form-text {
+  resize: none;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+#prompt-form-submit-button {
+  background-color: #19c37d;
+  color: #fff;
+  margin-top: 0.5em;
+}
+
+#prompt-form-submit-button:hover {
+  background-color: #5dc097;
+}
+
+#prompts-list {
+  margin-top: 20px;
+}
+
+.prompt-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1em;
+  padding: 0.5em;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  background-color: #444654;
+}
+
+.copy-button,
+.delete-button {
+  width: 2em;
+  height: 2em;
+  padding: 0em;
+}
+
+.prompt-name {
+  flex: 1;
 }
