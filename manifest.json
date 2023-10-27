@@ -13,5 +13,11 @@
       "js": ["scripts/content.js"],
       "matches": ["https://chat.openai.com/*"]
     }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["popup.css"],
+      "matches": ["<all_urls>"]
+    }
   ]
 }

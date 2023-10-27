@@ -1,6 +1,9 @@
+import { deletePrompt } from "./deletePrompt.js";
+
 export async function readAndDisplayPrompts() {
   chrome.storage.sync.get({ prompts: [] }, function (result) {
     const prompts = result.prompts;
+    const promptsList = document.getElementById("prompts-list");
     promptsList.innerHTML = ""; // Clear the list
 
     if (prompts.length > 0) {
@@ -10,8 +13,6 @@ export async function readAndDisplayPrompts() {
         button.id = `prompt-${prompt.id}`;
         button.classList.add("insertTextButton");
         button.textContent = `${prompt.name}: ${prompt.text}`;
-
-        // Attach click event listener to button
         button.addEventListener("click", function () {
           chrome.tabs.query(
             { active: true, currentWindow: true },
@@ -23,7 +24,20 @@ export async function readAndDisplayPrompts() {
             }
           );
         });
-        promptsList.appendChild(button);
+
+        // Create delete button
+        const deleteButton = document.createElement("button");
+        deleteButton.classList.add("deleteButton");
+        deleteButton.textContent = "Delete";
+        deleteButton.addEventListener("click", function () {
+          deletePrompt(prompt.id);
+        });
+
+        // Adds buttons to container and container to html
+        const promptContainer = document.createElement("div");
+        promptContainer.appendChild(button);
+        promptContainer.appendChild(deleteButton);
+        promptsList.appendChild(promptContainer);
       });
     } else {
       promptsList.textContent = "No prompts saved yet.";

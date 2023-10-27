@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   // **CREATE**
 
   // Attach create function to form
-  const promptForm = document.getElementById("promptForm");
+  const promptForm = document.getElementById("prompt-form");
   promptForm.addEventListener("submit", createPrompt);
 
   // **READ**
