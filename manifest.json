@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Reading time",
+  "name": "ChatGPT prompts",
   "description": "Insert prompts into chat gpt's text box",
   "version": "1.0",
   "permissions": ["activeTab", "storage"],
