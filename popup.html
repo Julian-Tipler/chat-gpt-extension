@@ -1,0 +1,33 @@
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="popup.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <h1>ChatGPT prompts</h1>
+    <div class="main-container">
+      <button id="show-form-button">+</button>
+      <form id="prompt-form" class="prompt-form">
+        <div id="prompt-form-name-container">
+          <label for="prompt-form-name">Name:</label>
+          <input type="text" id="prompt-form-name" maxlength="30" required />
+        </div>
+        <br />
+        <label for="prompt-form-text">Text:</label>
+        <textarea id="prompt-form-text" required></textarea>
+        <br />
+        <input
+          class="clickable-button"
+          id="prompt-form-submit-button"
+          type="submit"
+          value="Add Prompt"
+        />
+      </form>
+      <div id="prompts-list"></div>
+    </div>
+    <script type="module" src="./scripts/popup.js"></script>
+  </body>
+</html>

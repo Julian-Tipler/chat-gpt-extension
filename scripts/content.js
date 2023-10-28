@@ -1,16 +1,13 @@
+// Listens for changeText action and changes the text in the target website
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  console.log("here receiving message")
+  console.log("received message")
+  console.log(request.action)
   if (request.action === "changeText") {
-    console.log("correct action")
-    const h1Elements = document.querySelectorAll("h1");
-    h1Elements.forEach((element) => {
-      element.textContent = "itsa me";
-    });
+    const searchBar = document.getElementById("prompt-textarea");
+    console.log(searchBar)
+    if (searchBar) {
+      searchBar.value += request.popupText;
+    }
   }
-
-  // const searchBar = document.getElementById("prompt-textarea");
-  // if (searchBar) {
-  //   searchBar.value = "hello world";
-  // } else {
-  // }
 });
+
