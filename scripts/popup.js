@@ -12,16 +12,13 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   const showFormButton = document.getElementById("show-form-button");
   showFormButton.addEventListener("click", function () {
-    if (
-      promptForm.style.display === "none" ||
-      promptForm.style.display === ""
-    ) {
+    if (!promptForm.classList.contains("prompt-form-displayed")) {
       // Show the form
-      promptForm.style.display = "block";
+      promptForm.classList.add("prompt-form-displayed");
       showFormButton.textContent = "-";
     } else {
       // Hide the form
-      promptForm.style.display = "none";
+      promptForm.classList.remove("prompt-form-displayed");
       showFormButton.textContent = "+";
     }
   });

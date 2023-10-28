@@ -56,11 +56,15 @@ button#show-form-button {
   text-align: center;
 }
 
-#prompt-form {
+.prompt-form {
   display: none;
-  padding: 1em;
   border-radius: 0.5em;
   background-color: #343541;
+  padding: 1em;
+}
+
+.prompt-form-displayed {
+  display: block;
 }
 
 label {

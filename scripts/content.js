@@ -6,7 +6,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     const searchBar = document.getElementById("prompt-textarea");
     console.log(searchBar)
     if (searchBar) {
-      searchBar.value = request.popupText;
+      searchBar.value += request.popupText;
     }
   }
 });
