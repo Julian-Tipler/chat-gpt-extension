@@ -1,13 +1,15 @@
 import { deletePrompt } from "./deletePrompt.js";
 
 export async function readAndDisplayPrompts() {
-  chrome.storage.sync.get({ prompts: [] }, function (result) {
+  chrome.storage.sync.get({ prompts: [] }, createPromptButtons);
+
+  function createPromptButtons(result) {
     const prompts = result.prompts;
     const promptsList = document.getElementById("prompts-list");
     promptsList.innerHTML = ""; // Clear the list
 
     if (prompts.length > 0) {
-      prompts.forEach(function (prompt, index) {
+      prompts.forEach(function (prompt) {
         // Create a div that contains the prompt name
         const promptName = document.createElement("div");
         promptName.classList.add("prompt-name");
@@ -55,5 +57,5 @@ export async function readAndDisplayPrompts() {
     } else {
       promptsList.textContent = "No prompts saved yet.";
     }
-  });
+  }
 }

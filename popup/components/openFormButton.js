@@ -1,17 +1,18 @@
-import { createPrompt } from "./prompts/createPrompt.js";
-import { readAndDisplayPrompts } from "./prompts/readAndDisplayPrompts.js";
+import { createPrompt } from "../prompts/createPrompt.js";
 
-document.addEventListener("DOMContentLoaded", async function () {
-  await readAndDisplayPrompts();
-
-  // **CREATE**
-
-  // Attach create function to form
+export const openFormButton = () => {
+  // Selectors
   const promptForm = document.getElementById("prompt-form");
-  promptForm.addEventListener("submit", createPrompt);
-
   const showFormButton = document.getElementById("show-form-button");
-  showFormButton.addEventListener("click", function () {
+
+  // Event listeners
+  promptForm.addEventListener("submit", createPrompt);
+  showFormButton.addEventListener("click", toggleForm);
+
+  // Functions
+  function toggleForm(e) {
+    console.log("toggleForm");
+    e.preventDefault();
     if (!promptForm.classList.contains("prompt-form-displayed")) {
       // Show the form
       promptForm.classList.add("prompt-form-displayed");
@@ -21,9 +22,5 @@ document.addEventListener("DOMContentLoaded", async function () {
       promptForm.classList.remove("prompt-form-displayed");
       showFormButton.textContent = "+";
     }
-  });
-
-  // **READ**
-
-  // Function
-});
+  }
+};
