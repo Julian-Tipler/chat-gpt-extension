@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "chrome-types": "^0.1.236"
+  },
+  "devDependencies": {
+    "eslint": "^8.52.0"
   }
 }
