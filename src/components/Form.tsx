@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export const FormContainer = () => {
-  const [showForm, setShowForm] = useState(true);
+  const [showForm, setShowForm] = useState(false);
   return (
     <>
       <button id="show-form-button" onClick={() => setShowForm(!showForm)}>
