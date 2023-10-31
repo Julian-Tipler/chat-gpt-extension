@@ -27,8 +27,7 @@ const content =
   "There once was a rubber duck named 'Quack'. He lived in a very nice";
 const apiUrl =
   "http://localhost:54321/functions/v1/autocomplete?userId=<redacted>";
-const accessToken =
-  "<redacted>";
+const accessToken = "<redacted>";
 
 setInterval(() => {
   if (Date.now() - lastInputTime >= recommendationDelay) {
@@ -47,28 +46,46 @@ setInterval(() => {
         const autocomplete = data.autocomplete; // Extract the recommendation from the API response
         if (autocomplete) {
           // Insert the recommendation into the text input or textarea
-          const inputField =
-            document.querySelector('input[type="text"]') ||
-            document.querySelector("textarea");
-          console.log(inputField);
-          if (inputField) {
-            inputField.focus();
-            inputField.value += `<span class="ghost-text" styles={{color:white}}>${autocomplete}</span>`;
-            inputField.dispatchEvent(new Event("input", { bubbles: true }));
-            // add scrolling behavior
-            lastInputTime = Date.now(); // Reset the timer
-          }
+          createAutocompleteText(autocomplete);
         }
       })
       .catch((error) => {
         console.error("error", error);
       });
   }
-}, 10000);
+}, 1000000);
 
-// mvp
-// setTimeout for 5 seconds then fetch the autocomplete
+function createAutocompleteText(autocomplete) {
+  const textArea =
+    document.querySelector('input[type="text"]') ||
+    document.querySelector("textarea");
+  if (textArea) {
+    textArea.focus();
+    const ghostText = document.createElement("span");
+    ghostText.style.opacity = 0.5;
+    ghostText.textContent += autocomplete;
+    console.log("ghostText", ghostText);
+    textArea.parentNode.appendChild(ghostText);
+    console.log("textArea", textArea);
+    textArea.dispatchEvent(new Event("input", { bubbles: true }));
+    lastInputTime = Date.now();
+  }
+}
+setTimeout(() => {
+  createAutocompleteText("hello");
+}, 1000);
 
-// final
-// Await typing finished
-// then do fetch
+function insertAutocompleteText(autocomplete) {
+  const textArea =
+    document.querySelector('input[type="text"]') ||
+    document.querySelector("textarea");
+  textArea.textContent += autocomplete;
+  textArea.dispatchEvent(new Event("input", { bubbles: true }));
+}
+
+document.addEventListener("keydown", function(event) {
+  if (event.key === "Tab") {
+    event.preventDefault();
+    insertAutocompleteText("hello text");
+  }
+});
