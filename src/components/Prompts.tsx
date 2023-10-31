@@ -20,14 +20,14 @@ const Prompt = ({ prompt }: { prompt: Prompt }) => {
         <button
           id={`prompt-${prompt.id}`}
           className={"clickable-button copy-button"}
-          onClick={(e) => handlPaste({ e, prompt })}
+          onClick={(e) => handlePaste({ e, prompt })}
         >
           <i className="fas fa-copy" />
         </button>
         <button
           id={`prompt-${prompt.id}`}
           className={"clickable-button copy-button"}
-          onClick={(e) => handlPaste({ e, prompt })}
+          onClick={(e) => handleDelete({ e, prompt })}
         >
           <i className="fas fa-trash" />
         </button>
@@ -36,7 +36,7 @@ const Prompt = ({ prompt }: { prompt: Prompt }) => {
   );
 };
 
-const handlPaste = ({
+const handlePaste = ({
   e,
   prompt,
 }: {
@@ -51,5 +51,21 @@ const handlPaste = ({
         popupText: prompt.text,
       });
     }
+  });
+};
+
+const handleDelete = ({
+  e,
+  prompt,
+}: {
+  e: React.MouseEvent<HTMLElement, MouseEvent>;
+  prompt: Prompt;
+}) => {
+  e.preventDefault();
+  chrome.storage.sync.get({ prompts: [] }, function(result) {
+    const prompts = result.prompts.filter((p: Prompt) => p.id !== prompt.id);
+    chrome.storage.sync.set({ prompts }, function() {
+      console.log("Prompt deleted");
+    });
   });
 };
