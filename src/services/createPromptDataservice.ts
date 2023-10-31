@@ -16,19 +16,6 @@ export const createPromptDataservice = async (form: PromptFormState) => {
       });
     });
   });
-  await chrome.storage.sync.get({ prompts: [] }, async function(result) {
-    const prompts = result.prompts;
-
-    // Add the new prompt to the array
-    prompts.push({
-      id: generateId(),
-      name: form.name,
-      text: form.text,
-    });
-
-    // Save the updated prompts array to chrome.storage.sync
-    await chrome.storage.sync.set({ prompts }, function() {});
-  });
 };
 
 const generateId = () => {

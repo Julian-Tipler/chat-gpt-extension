@@ -3,19 +3,20 @@ import { Prompt } from "../App";
 import { readPromptsDataservice } from "../services/readPromptsDataservice";
 import { createPromptDataservice } from "../services/createPromptDataservice";
 import { PromptFormState } from "../components/Form";
+import { deletePromptDataservice } from "../services/deletePromptDataservice";
 
 interface PromptsContextType {
   prompts: Prompt[];
-  addPrompts: (prompt: Prompt[]) => void;
+  readPrompts: (prompt: Prompt[]) => void;
   createPrompt: (prompt: PromptFormState) => void;
-  removePrompt: (index: number) => void;
+  deletePrompt: (index: string) => void;
 }
 
 export const PromptsContext = createContext<PromptsContextType>({
   prompts: [],
-  addPrompts: () => {},
+  readPrompts: () => {},
   createPrompt: () => {},
-  removePrompt: () => {},
+  deletePrompt: () => {},
 });
 
 const PromptsContextProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -24,10 +25,10 @@ const PromptsContextProvider: React.FC<{ children: React.ReactNode }> = ({
   const [prompts, setPrompts] = useState<Prompt[]>([]);
 
   useEffect(() => {
-    addPrompts();
+    readPrompts();
   }, []);
 
-  const addPrompts = async () => {
+  const readPrompts = async () => {
     await readPromptsDataservice().then((prompts: Prompt[]) => {
       setPrompts(prompts);
     });
@@ -35,18 +36,17 @@ const PromptsContextProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const createPrompt = async (form: PromptFormState) => {
     await createPromptDataservice(form);
-    await addPrompts();
-  };
+    await readPrompts();
+  };  
 
-  const removePrompt = (index: number) => {
-    const newPrompts = [...prompts];
-    newPrompts.splice(index, 1);
-    setPrompts(newPrompts);
+  const deletePrompt = async (promptId: string) => {
+    await deletePromptDataservice(promptId);
+    await readPrompts();
   };
 
   return (
     <PromptsContext.Provider
-      value={{ prompts, addPrompts, createPrompt, removePrompt }}
+      value={{ prompts, readPrompts, createPrompt, deletePrompt }}
     >
       {children}
     </PromptsContext.Provider>

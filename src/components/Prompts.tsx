@@ -1,5 +1,6 @@
 import React from "react";
 import { Prompt } from "../App";
+import { usePrompts } from "../contexts/PromptsContext";
 
 export const Prompts = ({ prompts }: { prompts: Prompt[] }) => {
   if (prompts.length === 0) return <div>No prompts</div>;
@@ -13,6 +14,19 @@ export const Prompts = ({ prompts }: { prompts: Prompt[] }) => {
 };
 
 const Prompt = ({ prompt }: { prompt: Prompt }) => {
+  const { deletePrompt } = usePrompts();
+
+  const handleDelete = ({
+    e,
+    promptId,
+  }: {
+    e: React.MouseEvent<HTMLElement, MouseEvent>;
+    promptId: string;
+  }) => {
+    e.preventDefault();
+    deletePrompt(promptId);
+  };
+
   return (
     <div className="prompt-container">
       <div className={"prompt-name"}>{prompt.name}</div>
@@ -27,7 +41,7 @@ const Prompt = ({ prompt }: { prompt: Prompt }) => {
         <button
           id={`prompt-${prompt.id}`}
           className={"clickable-button copy-button"}
-          onClick={(e) => handleDelete({ e, prompt })}
+          onClick={(e) => handleDelete({ e, promptId: prompt.id })}
         >
           <i className="fas fa-trash" />
         </button>
@@ -53,22 +67,3 @@ const handlePaste = ({
     }
   });
 };
-
-const handleDelete = ({
-  e,
-  prompt,
-}: {
-  e: React.MouseEvent<HTMLElement, MouseEvent>;
-  prompt: Prompt;
-}) => {
-  e.preventDefault();
-  chrome.storage.sync.get({ prompts: [] }, function(result) {
-    const prompts = result.prompts.filter((p: Prompt) => p.id !== prompt.id);
-    chrome.storage.sync.set({ prompts }, function() {
-      console.log("Prompt deleted");
-    });
-  });
-};
-
-
-// Delete from chrome, trigger refetch prompts function 
