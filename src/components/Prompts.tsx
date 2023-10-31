@@ -2,6 +2,7 @@ import React from "react";
 import { Prompt } from "../App";
 
 export const Prompts = ({ prompts }: { prompts: Prompt[] }) => {
+  if (prompts.length === 0) return <div>No prompts</div>;
   return (
     <div className="prompts-container">
       {prompts.map((prompt, index) => (

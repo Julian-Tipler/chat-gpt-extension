@@ -1,25 +1,9 @@
+import { useEffect, useState } from "react";
 import "./App.css";
 import { FormContainer } from "./components/Form";
 import { Prompts } from "./components/Prompts";
 import { Title } from "./components/Title";
-
-const prompts = [
-  {
-    id: "123",
-    name: "test prompt",
-    text: "test text text text",
-  },
-  {
-    id: "456",
-    name: "test prompt 2",
-    text: "test text text text 2",
-  },
-  {
-    id: "789",
-    name: "test prompt 3",
-    text: "test text text text 3",
-  },
-];
+import { readPrompts } from "./services/readPrompts";
 
 export type Prompt = {
   id: string;
@@ -28,6 +12,12 @@ export type Prompt = {
 };
 
 function App() {
+  const [prompts, setPrompts] = useState<Prompt[]>([]);
+  useEffect(() => {
+    readPrompts().then((prompts) => {
+      setPrompts(prompts);
+    });
+  }, []);
   return (
     <div className="main-container">
       <Title />
