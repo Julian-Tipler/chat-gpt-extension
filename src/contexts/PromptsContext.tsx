@@ -1,17 +1,20 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 import { Prompt } from "../App";
+import { readPromptsDataservice } from "../services/readPromptsDataservice";
+import { createPromptDataservice } from "../services/createPromptDataservice";
+import { PromptFormState } from "../components/Form";
 
 interface PromptsContextType {
   prompts: Prompt[];
-  addPrompt: (prompt: Prompt) => void;
   addPrompts: (prompt: Prompt[]) => void;
+  createPrompt: (prompt: PromptFormState) => void;
   removePrompt: (index: number) => void;
 }
 
 export const PromptsContext = createContext<PromptsContextType>({
   prompts: [],
-  addPrompt: () => {},
   addPrompts: () => {},
+  createPrompt: () => {},
   removePrompt: () => {},
 });
 
@@ -20,12 +23,19 @@ const PromptsContextProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [prompts, setPrompts] = useState<Prompt[]>([]);
 
-  const addPrompts = (prompts: Prompt[]) => {
-    console.log("in context", prompts);
-    setPrompts([...prompts]);
+  useEffect(() => {
+    addPrompts();
+  }, []);
+
+  const addPrompts = async () => {
+    await readPromptsDataservice().then((prompts: Prompt[]) => {
+      setPrompts(prompts);
+    });
   };
-  const addPrompt = (prompt: Prompt) => {
-    setPrompts([...prompts, prompt]);
+
+  const createPrompt = async (form: PromptFormState) => {
+    await createPromptDataservice(form);
+    await addPrompts();
   };
 
   const removePrompt = (index: number) => {
@@ -36,7 +46,7 @@ const PromptsContextProvider: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <PromptsContext.Provider
-      value={{ prompts, addPrompt, addPrompts, removePrompt }}
+      value={{ prompts, addPrompts, createPrompt, removePrompt }}
     >
       {children}
     </PromptsContext.Provider>

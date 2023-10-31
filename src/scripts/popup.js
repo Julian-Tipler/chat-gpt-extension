@@ -3,7 +3,6 @@ import { readAndDisplayPrompts } from "./prompts/readAndDisplayPrompts.js";
 
 document.addEventListener("DOMContentLoaded", async function () {
   await readAndDisplayPrompts();
-  console.log("hello")
 
   // **CREATE**
 

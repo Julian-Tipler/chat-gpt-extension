@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { usePrompts } from "../contexts/PromptsContext";
 
 export const FormContainer = () => {
   const [showForm, setShowForm] = useState(false);
@@ -12,7 +13,7 @@ export const FormContainer = () => {
   );
 };
 
-type FormState = {
+export type PromptFormState = {
   name: string;
   text: string;
 };
@@ -22,6 +23,23 @@ const Form = () => {
     name: "",
     text: "",
   });
+
+  const { createPrompt } = usePrompts();
+
+  const handleSubmit = ({
+    e,
+    form,
+    setForm,
+  }: {
+    e: React.FormEvent<HTMLFormElement>;
+    form: PromptFormState;
+    setForm: React.Dispatch<React.SetStateAction<PromptFormState>>;
+  }) => {
+    e.preventDefault();
+    createPrompt(form);
+    setForm({ name: "", text: "" });
+  };
+
   return (
     <form
       id="prompt-form"
@@ -56,37 +74,4 @@ const Form = () => {
       />
     </form>
   );
-};
-
-const handleSubmit = ({
-  e,
-  form,
-  setForm,
-}: {
-  e: React.FormEvent<HTMLFormElement>;
-  form: FormState;
-  setForm: React.Dispatch<React.SetStateAction<FormState>>;
-}) => {
-  e.preventDefault();
-  chrome.storage.sync.get({ prompts: [] }, function(result) {
-    const prompts = result.prompts;
-
-    // Add the new prompt to the array
-    prompts.push({ id: generateId(), name: form.name, text: form.text });
-
-    // Save the updated prompts array to chrome.storage.sync
-    chrome.storage.sync.set({ prompts }, function() {
-      console.log("Prompt saved");
-    });
-
-    // Clear the form inputs
-    setForm({ name: "", text: "" });
-  });
-};
-
-const generateId = () => {
-  const randomNum = Math.random()
-    .toString(36)
-    .substr(2, 9);
-  return randomNum;
 };
