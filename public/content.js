@@ -1,4 +1,4 @@
-console.log("content script running 👌 🤟");
+console.log("content script running 🚀");
 
 // Prompts
 chrome.runtime.onMessage.addListener(function(request) {
@@ -25,8 +25,10 @@ document.addEventListener("input", () => {
 
 const content =
   "There once was a rubber duck named 'Quack'. He lived in a very nice";
-const apiUrl = "mockApiUrl";
-const accessToken = "MockAccessToken";
+const apiUrl =
+  "http://localhost:54321/functions/v1/autocomplete?userId=<redacted>";
+const accessToken =
+  "<redacted>";
 
 setInterval(() => {
   if (Date.now() - lastInputTime >= recommendationDelay) {
@@ -41,20 +43,28 @@ setInterval(() => {
     })
       .then((response) => response.json())
       .then((data) => {
-        const recommendation = data.recommendation; // Extract the recommendation from the API response
-        if (recommendation) {
+        console.log("data", data);
+        const autocomplete = data.autocomplete; // Extract the recommendation from the API response
+        if (autocomplete) {
           // Insert the recommendation into the text input or textarea
           const inputField =
             document.querySelector('input[type="text"]') ||
             document.querySelector("textarea");
+          console.log(inputField);
           if (inputField) {
-            inputField.value += recommendation;
+            inputField.focus();
+            inputField.value += `<span class="ghost-text" styles={{color:white}}>${autocomplete}</span>`;
+            inputField.dispatchEvent(new Event("input", { bubbles: true }));
+            // add scrolling behavior
             lastInputTime = Date.now(); // Reset the timer
           }
         }
+      })
+      .catch((error) => {
+        console.error("error", error);
       });
   }
-}, 500);
+}, 10000);
 
 // mvp
 // setTimeout for 5 seconds then fetch the autocomplete
