@@ -2,7 +2,9 @@ import React from "react";
 import { Prompt } from "../App";
 import { usePrompts } from "../contexts/PromptsContext";
 
-export const Prompts = ({ prompts }: { prompts: Prompt[] }) => {
+export const Prompts = () => {
+  const { prompts } = usePrompts();
+
   if (prompts.length === 0) return <div>No prompts</div>;
   return (
     <div className="prompts-container">
@@ -62,7 +64,7 @@ const handlePaste = ({
     if (tabs[0] && tabs[0].id) {
       chrome.tabs.sendMessage(tabs[0].id, {
         action: "changeText",
-        popupText: prompt.text,
+        text: prompt.text,
       });
     }
   });

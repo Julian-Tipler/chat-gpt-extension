@@ -37,7 +37,7 @@ const PromptsContextProvider: React.FC<{ children: React.ReactNode }> = ({
   const createPrompt = async (form: PromptFormState) => {
     await createPromptDataservice(form);
     await readPrompts();
-  };  
+  };
 
   const deletePrompt = async (promptId: string) => {
     await deletePromptDataservice(promptId);
