@@ -69,3 +69,6 @@ const handleDelete = ({
     });
   });
 };
+
+
+// Delete from chrome, trigger refetch prompts function 
