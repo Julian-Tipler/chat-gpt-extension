@@ -57,14 +57,9 @@ button#show-form-button {
 }
 
 .prompt-form {
-  display: none;
   border-radius: 0.5em;
   background-color: #343541;
   padding: 1em;
-}
-
-.prompt-form-displayed {
-  display: block;
 }
 
 label {

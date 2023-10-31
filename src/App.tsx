@@ -1,10 +1,13 @@
 import "./App.css";
+import { FormContainer } from "./components/Form";
+import { Title } from "./components/Title";
 
 function App() {
   return (
-    <>
-      <div>hello world 3</div>
-    </>
+    <div>
+      <Title />
+      <FormContainer />
+    </div>
   );
 }
 
