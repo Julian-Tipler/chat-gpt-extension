@@ -1,0 +1,37 @@
+.text-area-container {
+  position: relative;
+}
+
+.super-text-input {
+  position: absolute;
+  width: 80%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  text-align: start;
+  padding: 1em;
+  max-height: 200px;
+  overflow-y: hidden;
+  padding: 10px 2.5rem 10px 0.75rem;
+  border-width: 0;
+  margin: 0;
+  background-color: #444654;
+  /* Temporary */
+}
+
+.logo {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+}
+
+.super-text-input:focus {
+  outline: none;
+}
+
+.ghost-text {
+  color: red;
+  z-index: 5;
+  opacity: 0.5;
+}

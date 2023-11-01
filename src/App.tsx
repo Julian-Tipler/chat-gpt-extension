@@ -10,6 +10,7 @@ export type Prompt = {
 };
 
 function App() {
+  const unused = ""
   return (
     <div className="main-container">
       <Title />
