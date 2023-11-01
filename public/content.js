@@ -30,13 +30,13 @@ const recommendationDelay = 1500;
 document.addEventListener("input", () => {
   lastInputTime = Date.now();
 });
-
 document.addEventListener("keydown", function(event) {
   if (event.key === "Tab") {
     event.preventDefault();
     insertAutocompleteText("hello text");
   }
 });
+
 //Functions
 function fetchAutocomplete() {
   if (Date.now() - lastInputTime >= recommendationDelay) {
@@ -68,10 +68,7 @@ function fetchAutocomplete() {
       });
   }
 }
-
 setInterval(() => {}, 1000000);
-
-// Already present components
 
 function modifySuperTextInput() {
   // Create super text input
@@ -109,9 +106,6 @@ function addAutocompleteText(autocomplete) {
 // }, 5000);
 
 function insertAutocompleteText(autocomplete) {
-  const textArea =
-    document.querySelector('input[type="text"]') ||
-    document.querySelector("textarea");
   textArea.textContent += autocomplete;
   textArea.dispatchEvent(new Event("input", { bubbles: true }));
 }
