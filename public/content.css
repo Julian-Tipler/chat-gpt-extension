@@ -16,8 +16,8 @@
   border-width: 0;
   margin: 0;
   background-color: transparent;
-  opacity: 0.5;
   pointer-events: none;
+  color: transparent;
 }
 
 .logo {
@@ -30,7 +30,7 @@
   outline: none;
 }
 
-.ghost-text {
+#ghost-text {
   color: gray;
   opacity: 1;
 }

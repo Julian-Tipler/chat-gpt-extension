@@ -2,6 +2,7 @@ console.log("content script running !!!");
 
 // AUTOCOMPLETE
 // UI variables
+let ghostText = "";
 const textArea =
   document.querySelector('input[type="text"]') ||
   document.querySelector("textarea");
@@ -14,39 +15,51 @@ superTextArea.classList.add("super-text-area");
 superTextArea.setAttribute("contenteditable", true);
 textAreaContainer.appendChild(superTextArea);
 
-let ghostText = "";
+const form = document.querySelector("form");
+form.addEventListener("submit", function() {
+  syncSuperTextArea();
+});
 
 // Listeners
 textArea.addEventListener("input", () => {
   lastInputTime = Date.now();
-  superTextArea.textContent = textArea.value;
-  const ghostTextContainer = document.createElement("span");
-  ghostTextContainer.id = "ghost-text";
-  ghostText = "";
-  ghostTextContainer.textContent = ghostText;
-  superTextArea.appendChild(ghostTextContainer);
-  console.log(superTextArea);
+  syncSuperTextArea();
 });
 let lastInputTime = Date.now();
-const DELAY_AFTER_TYPING = 2000;
-setInterval(maybeAddAutocomplete, 1000);
+const DELAY_AFTER_TYPING = 500;
+setInterval(maybeAddAutocomplete, 200);
 
 document.addEventListener("keydown", function(event) {
   if (event.key === "Tab") {
-    console.log("tab pressed");
     event.preventDefault();
     textArea.value += ghostText;
+    resetGhostText();
     textArea.dispatchEvent(new Event("input", { bubbles: true }));
     textArea.focus();
   }
 });
 
 //Functions
+function syncSuperTextArea() {
+  superTextArea.textContent = textArea.value;
+  const ghostTextContainer = document.createElement("span");
+  ghostTextContainer.id = "ghost-text";
+  ghostText = "";
+  ghostTextContainer.textContent = ghostText;
+  superTextArea.appendChild(ghostTextContainer);
+}
+
+function resetGhostText() {
+  const ghostTextContainer = document.getElementById("ghost-text");
+  ghostText = "";
+  ghostTextContainer.textContent = ghostText;
+}
 async function maybeAddAutocomplete() {
   // Has it been enough time since last user input and is the text itself long enough to warrant a fetch?
   if (
     Date.now() - lastInputTime >= DELAY_AFTER_TYPING &&
-    textArea.value.length > 10
+    textArea.value.length > 10 &&
+    ghostText === ""
   ) {
     const autocomplete = await fetchAutocomplete();
     addGhostText(autocomplete);
