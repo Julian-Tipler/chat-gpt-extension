@@ -1,5 +1,4 @@
 console.log("content script running !!!");
-sdf = "hello"
 
 // Prompts
 chrome.runtime.onMessage.addListener(function(request) {
