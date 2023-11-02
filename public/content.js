@@ -75,10 +75,8 @@ function fetchAutocomplete() {
   console.log("fetching autocomplete");
   // Fetch a recommendation from your ChatGPT API
   const content = textArea.textContent;
-  const apiUrl =
-    "http://localhost:54321/functions/v1/autocomplete?userId=80c39e74-7767-44a4-b6cf-2b2baa040a71";
-  const accessToken =
-    ***REMOVED***;
+  const apiUrl = "redacted";
+  const accessToken = "readacted";
   return fetch(apiUrl, {
     method: "POST",
     headers: {
