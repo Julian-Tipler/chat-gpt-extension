@@ -31,10 +31,6 @@
   right: 0.5rem;
 }
 
-.ghost-text-input:focus {
-  outline: none;
-}
-
 #autocomplete-text {
   color: gray;
   opacity: 1;
