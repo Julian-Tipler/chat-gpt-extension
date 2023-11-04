@@ -1,8 +1,6 @@
-console.log("content script running !!!");
-
 // AUTOCOMPLETE
 // UI variables
-let ghostText = "";
+let autocompleteText = "";
 const textArea =
   document.querySelector('input[type="text"]') ||
   document.querySelector("textarea");
@@ -10,20 +8,20 @@ const textArea =
 const textAreaContainer = textArea.parentNode;
 textAreaContainer.classList.add("text-area-container");
 
-const superTextArea = document.createElement("div");
-superTextArea.classList.add("super-text-area");
-superTextArea.setAttribute("contenteditable", true);
-textAreaContainer.appendChild(superTextArea);
+const ghostTextArea = document.createElement("div");
+ghostTextArea.classList.add("ghost-text-area");
+ghostTextArea.setAttribute("contenteditable", true);
+textAreaContainer.appendChild(ghostTextArea);
 
 const form = document.querySelector("form");
 form.addEventListener("submit", function() {
-  syncSuperTextArea();
+  syncGhostTextArea();
 });
 
 // Listeners
 textArea.addEventListener("input", () => {
   lastInputTime = Date.now();
-  syncSuperTextArea();
+  syncGhostTextArea();
 });
 let lastInputTime = Date.now();
 const DELAY_AFTER_TYPING = 500;
@@ -32,51 +30,56 @@ setInterval(maybeAddAutocomplete, 200);
 document.addEventListener("keydown", function(event) {
   if (event.key === "Tab") {
     event.preventDefault();
-    textArea.value += ghostText;
-    resetGhostText();
+    textArea.value += autocompleteText;
+    resetautocompleteText();
     textArea.dispatchEvent(new Event("input", { bubbles: true }));
     textArea.focus();
   }
 });
 
 //Functions
-function syncSuperTextArea() {
-  superTextArea.textContent = textArea.value;
-  const ghostTextContainer = document.createElement("span");
-  ghostTextContainer.id = "ghost-text";
-  ghostText = "";
-  ghostTextContainer.textContent = ghostText;
-  superTextArea.appendChild(ghostTextContainer);
+function syncGhostTextArea() {
+  ghostTextArea.textContent = textArea.value;
+  const autocompleteTextContainer = document.createElement("span");
+  autocompleteTextContainer.id = "autocomplete-text";
+  autocompleteText = "";
+  autocompleteTextContainer.textContent = autocompleteText;
+  ghostTextArea.appendChild(autocompleteTextContainer);
 }
 
-function resetGhostText() {
-  const ghostTextContainer = document.getElementById("ghost-text");
-  ghostText = "";
-  ghostTextContainer.textContent = ghostText;
+function resetautocompleteText() {
+  const autocompleteTextContainer = document.getElementById(
+    "autocomplete-text"
+  );
+  autocompleteText = "";
+  autocompleteTextContainer.textContent = autocompleteText;
 }
 async function maybeAddAutocomplete() {
   // Has it been enough time since last user input and is the text itself long enough to warrant a fetch?
   if (
     Date.now() - lastInputTime >= DELAY_AFTER_TYPING &&
     textArea.value.length > 10 &&
-    ghostText === ""
+    autocompleteText === ""
   ) {
     const autocomplete = await fetchAutocomplete();
-    addGhostText(autocomplete);
+    addautocompleteText(autocomplete);
   }
 }
-function addGhostText(autocomplete) {
-  const existingGhostTextContainer = document.getElementById("ghost-text");
-  ghostText = autocomplete;
-  existingGhostTextContainer.textContent = ghostText;
+function addautocompleteText(autocomplete) {
+  const existingautocompleteTextContainer = document.getElementById(
+    "autocomplete-text"
+  );
+  autocompleteText = autocomplete;
+  existingautocompleteTextContainer.textContent = autocompleteText;
 }
 
 function fetchAutocomplete() {
   console.log("fetching autocomplete");
   // Fetch a recommendation from your ChatGPT API
   const content = textArea.textContent;
-  const apiUrl = "redacted";
-  const accessToken = "readacted";
+  const apiUrl =
+    "http://localhost:54321/functions/v1/autocomplete?userId=80c39e74-7767-44a4-b6cf-2b2baa040a71";
+  const accessToken = import.meta.env.VITE_WISE_API_TOKEN;
   return fetch(apiUrl, {
     method: "POST",
     headers: {

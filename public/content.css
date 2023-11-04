@@ -2,7 +2,7 @@
   position: relative;
 }
 
-.super-text-area {
+.ghost-text-area {
   position: absolute;
   width: 80%;
   height: 100%;
@@ -12,7 +12,7 @@
   text-align: start;
   max-height: 200px;
   overflow-y: hidden;
-  padding: 10px 2.5rem 10px 0.75rem;
+  padding: 1rem 2.5rem 1rem 0.75rem;
   border-width: 0;
   margin: 0;
   background-color: transparent;
@@ -26,11 +26,11 @@
   right: 0.5rem;
 }
 
-.super-text-input:focus {
+.ghost-text-input:focus {
   outline: none;
 }
 
-#ghost-text {
+#autocomplete-text {
   color: gray;
   opacity: 1;
 }
