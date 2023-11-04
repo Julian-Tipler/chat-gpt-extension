@@ -31,7 +31,7 @@ document.addEventListener("keydown", function(event) {
   if (event.key === "Tab") {
     event.preventDefault();
     textArea.value += autocompleteText;
-    resetautocompleteText();
+    resetAutocompleteText();
     textArea.dispatchEvent(new Event("input", { bubbles: true }));
     textArea.focus();
   }
@@ -39,7 +39,9 @@ document.addEventListener("keydown", function(event) {
 
 //Functions
 function syncGhostTextArea() {
-  ghostTextArea.textContent = textArea.value;
+  const newText = textArea.value.replace(/\n/g, "<br>");
+
+  ghostTextArea.innerHTML = newText;
   const autocompleteTextContainer = document.createElement("span");
   autocompleteTextContainer.id = "autocomplete-text";
   autocompleteText = "";
@@ -47,7 +49,7 @@ function syncGhostTextArea() {
   ghostTextArea.appendChild(autocompleteTextContainer);
 }
 
-function resetautocompleteText() {
+function resetAutocompleteText() {
   const autocompleteTextContainer = document.getElementById(
     "autocomplete-text"
   );
@@ -74,7 +76,6 @@ function addautocompleteText(autocomplete) {
 }
 
 function fetchAutocomplete() {
-  console.log("fetching autocomplete");
   // Fetch a recommendation from your ChatGPT API
   const content = textArea.textContent;
   const apiUrl =
@@ -90,7 +91,6 @@ function fetchAutocomplete() {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log("data.autocomplete", data.autocomplete);
       return data.autocomplete;
     })
     .catch((error) => {
