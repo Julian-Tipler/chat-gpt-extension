@@ -15,6 +15,7 @@ textAreaContainer.appendChild(ghostTextArea);
 const form = document.querySelector("form");
 form.addEventListener("submit", function() {
   syncGhostTextArea();
+  resetAutocompleteText()
 });
 
 // Listeners
