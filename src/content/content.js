@@ -6,7 +6,6 @@ const textArea =
   document.querySelector("textarea");
 
 const textAreaContainer = textArea.parentNode;
-textAreaContainer.classList.add("text-area-container");
 
 const ghostTextArea = document.createElement("div");
 ghostTextArea.classList.add("ghost-text-area");
