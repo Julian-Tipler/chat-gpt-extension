@@ -1,4 +1,4 @@
-import { Prompt } from "../App";
+import { Prompt } from "../views/Main";
 
 export const deletePromptDataservice = async (promptId: string) => {
   return new Promise<void>((resolve) => {

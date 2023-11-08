@@ -1,5 +1,5 @@
 {
-  "name": "wise-gpt",
+  "name": "web-auth",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,17 +7,15 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
-    "watch": "onchange '{src,public}/**/*' -- npm run build"
+    "preview": "vite preview"
   },
   "dependencies": {
-    "onchange": "^7.1.0",
+    "@supabase/supabase-js": "^2.38.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "vite-plugin-chrome-extension": "^0.0.7"
+    "react-router-dom": "^6.18.0"
   },
   "devDependencies": {
-    "@types/chrome": "^0.0.248",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.0.0",

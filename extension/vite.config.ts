@@ -15,6 +15,9 @@ export default defineConfig({
           if (chunkInfo.name === "content") {
             return "content.js";
           }
+          if (chunkInfo.name === "background") {
+            return "background.js";
+          }
           // For all other entries, retain the default behavior which includes hashing and assets folder
           return "assets/[name]-[hash].js";
         },

@@ -1,5 +1,5 @@
 import React from "react";
-import { Prompt } from "../App";
+import { Prompt } from "../views/Main";
 import { usePrompts } from "../contexts/PromptsContext";
 
 export const Prompts = () => {
