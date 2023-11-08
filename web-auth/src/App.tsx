@@ -49,7 +49,7 @@ const App = () => {
           element: <Error message="Please verify your email" />,
         },
         {
-          path: "/",
+          index: true,
           loader: protectedLoader,
           element: <SuccessPage />,
         },
@@ -105,6 +105,17 @@ async function loginAction({ request }: LoaderFunctionArgs) {
 
   try {
     await supabase.auth.signInWithPassword({ email, password });
+    const session = await supabase.auth.getSession();
+    const extensionId = import.meta.env.VITE_EXTENSION_ID;
+    console.log("Extension ID:", extensionId);
+
+    if (session?.data?.session && chrome.runtime) {
+      console.log("Sending token to extension");
+      chrome.runtime.sendMessage(extensionId, {
+        action: "saveWiseSessionToken",
+        token: session.data.session,
+      });
+    }
   } catch (error) {
     // Unused as of now but this is how you would handle invalid
     // email/password combinations - just like validating the inputs
@@ -131,7 +142,7 @@ async function signupAction({ request }: LoaderFunctionArgs) {
   }
 
   try {
-    const result = await supabase.auth.signUp({ email, password });
+    await supabase.auth.signUp({ email, password });
   } catch (error) {
     return {
       error: "Error creating account",

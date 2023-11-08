@@ -1,11 +1,9 @@
 import {
-  createBrowserRouter,
   HashRouter,
   LoaderFunctionArgs,
   Navigate,
   redirect,
   Route,
-  RouterProvider,
   Routes,
   useNavigate,
 } from "react-router-dom";
@@ -203,4 +201,3 @@ async function signupAction({ request }: LoaderFunctionArgs) {
   // Decide where to redirect after successful signup
   return redirect("/please-verify"); // You might want to redirect to '/login' or elsewhere
 }
-

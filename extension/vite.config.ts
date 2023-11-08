@@ -9,6 +9,7 @@ export default defineConfig({
       input: {
         main: "index.html", // The entry point for your React app
         content: "src/content/content.js", // The entry point for your content script
+        background: "src/background/background.js", // The entry point for your background script
       },
       output: {
         entryFileNames: (chunkInfo) => {
