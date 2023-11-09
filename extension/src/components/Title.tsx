@@ -1,5 +1,5 @@
-import React from "react";
+import { Heading } from "@chakra-ui/layout";
 
 export const Title = () => {
-  return <h1>Wise-GPT</h1>;
+  return <Heading fontSize={"24px"}>Wise-GPT</Heading>;
 };

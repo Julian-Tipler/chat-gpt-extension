@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
-import { Prompt } from "../views/Main";
+import { Prompt } from "../views/prompts/PromptsPage";
 import { readPromptsDataservice } from "../services/readPromptsDataservice";
 import { createPromptDataservice } from "../services/createPromptDataservice";
 import { PromptFormState } from "../components/Form";
@@ -56,4 +56,3 @@ const PromptsContextProvider: React.FC<{ children: React.ReactNode }> = ({
 export default PromptsContextProvider;
 
 export const usePrompts = () => useContext(PromptsContext);
-
