@@ -1,17 +1,14 @@
 import {
   HashRouter,
-  LoaderFunctionArgs,
   Navigate,
-  redirect,
   Route,
   Routes,
   useNavigate,
 } from "react-router-dom";
 import { Login } from "./views/auth/Login";
-import supabase from "./supabase/supabaseClient";
-import { Error } from "./components/Error";
-import { Main } from "./views/Main";
+import { PromptsPage } from "./views/prompts/PromptsPage";
 import { ReactNode, useEffect, useState } from "react";
+import { SettingsPage } from "./views/settings/SettingsPage";
 
 const App = () => {
   return (
@@ -21,7 +18,15 @@ const App = () => {
           path="/"
           element={
             <ProtectedRoute>
-              <Main />
+              <PromptsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <SettingsPage />
             </ProtectedRoute>
           }
         />

@@ -1,10 +1,11 @@
 export const colors = {
   brand: {
     primary: "#57CC99",
-    secondary: "#C7F9CC",
-    tertiary: "#38A3A5",
-    background: "#343541",
-    cardBackground: "#172D3A",
+    primaryHover: "#C7F9CC",
+    secondary: "#38A3A5",
+    secondaryHover: "#C7F9F9",
+    background: "#444654",
+    cardBackground: "#343541",
     border: "#2C414E",
   },
   text: {

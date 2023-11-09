@@ -1,17 +1,26 @@
 import React from "react";
-import { Prompt } from "../views/Main";
-import { usePrompts } from "../contexts/PromptsContext";
+import { Prompt } from "./PromptsPage";
+import { usePrompts } from "../../contexts/PromptsContext";
+import { Flex } from "@chakra-ui/layout";
 
 export const Prompts = () => {
   const { prompts } = usePrompts();
 
   if (prompts.length === 0) return <div>No prompts</div>;
   return (
-    <div className="prompts-container">
+    <Flex
+      flexDir={"column"}
+      maxH={"16rem"}
+      overflow={"scroll"}
+      bgColor={"brand.cardBackground"}
+      gap={"0.25rem"}
+      borderRadius={"0.25rem"}
+      padding={"0.25rem"}
+    >
       {prompts.map((prompt, index) => (
         <Prompt key={index} prompt={prompt} />
       ))}
-    </div>
+    </Flex>
   );
 };
 
@@ -30,9 +39,16 @@ const Prompt = ({ prompt }: { prompt: Prompt }) => {
   };
 
   return (
-    <div className="prompt-container">
+    <Flex
+      flexDir={"row"}
+      alignItems={"center"}
+      justifyContent={"space-between"}
+      padding={"0.5rem"}
+      borderRadius={"0.5rem"}
+      bgColor={"brand.background"}
+    >
       <div className={"prompt-name"}>{prompt.name}</div>
-      <div className={"prompt-icon-container"}>
+      <Flex gap={"0.25rem"}>
         <button
           id={`prompt-${prompt.id}`}
           className={"clickable-button copy-button"}
@@ -47,8 +63,8 @@ const Prompt = ({ prompt }: { prompt: Prompt }) => {
         >
           <i className="fas fa-trash" />
         </button>
-      </div>
-    </div>
+      </Flex>
+    </Flex>
   );
 };
 

@@ -1,4 +1,4 @@
-import { Prompt } from "../views/Main";
+import { Prompt } from "../views/prompts/PromptsPage";
 
 export const readPromptsDataservice = async (): Promise<Prompt[]> => {
   return new Promise((resolve, reject) => {
