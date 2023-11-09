@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "ChatGPT prompts",
+  "description": "Insert prompts into chat gpt's text box",
+  "version": "1.0",
+  "permissions": ["activeTab", "tabs", "storage", "scripting"],
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": "icon.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "externally_connectable": {
+    "matches": ["*://localhost:*/*"]
+  },
+  "content_scripts": [
+    {
+      "js": ["./content.js"],
+      "css": ["./content.css"],
+      "matches": ["https://chat.openai.com/*"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["popup.css"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
