@@ -78,7 +78,7 @@ async function protectedLoader({ request }: LoaderFunctionArgs) {
   // to this page upon successful authentication
   const auth = await supabase.auth.getSession();
   // something like this: const session = supabase.auth.session();
-  if (!auth.data.session) {
+  if (!auth?.data?.session) {
     const params = new URLSearchParams();
     params.set("from", new URL(request.url).pathname);
     return redirect("/login?" + params.toString());
