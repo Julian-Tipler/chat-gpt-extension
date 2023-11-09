@@ -16,6 +16,8 @@ window.addEventListener("load", () => {
   let lastInput = Date.now();
   let fetchState = "idle";
 
+  let autocompleteText = "";
+
   // Check if a textarea element was found
   if (textarea && container && form) {
     setListeners({ textarea, ghostTextarea, container, form });
@@ -27,38 +29,52 @@ window.addEventListener("load", () => {
     textarea.addEventListener("input", () => {
       // console.log("input detected");
       fetchState = "idle";
-      const newText = textarea.value.replace(/\n/g, "<br>");
-      ghostTextarea.innerHTML = newText;
       lastInput = Date.now();
+      const textareaText = textarea.value.replace(/\n/g, "<br>");
+      ghostTextarea.innerHTML = textareaText;
     });
     form.addEventListener("submit", () => {
       // console.log("form submitted");
       fetchState = "idle";
+      lastInput = Date.now();
       ghostTextarea.innerHTML = "";
+      console.log(ghostTextarea);
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Tab") {
+        e.preventDefault();
+        textarea.value += autocompleteText;
+        autocompleteText = "";
+        // This input should reset the ghostTextarea, deleting the span in the process
+        textarea.dispatchEvent(new Event("input", { bubbles: true }));
+        textarea.focus();
+      }
     });
     setInterval(async () => {
       if (
         // it has been 1 second since last input
-        Date.now() - lastInput > 500 &&
+        Date.now() - lastInput > 400 &&
         // and fetch state is idle
         fetchState === "idle" &&
         // there is more than 10 characters in the textarea
         ghostTextarea.innerHTML.length > 10
       ) {
         fetchState = "fetching";
-        const autocompleteText = await fetchAutocomplete({
+        const fetchedAutocompleteText = await fetchAutocomplete({
           fetchState,
           textarea,
         });
-        if (autocompleteText) {
+        if (fetchedAutocompleteText) {
           fetchState = "fetched";
+          autocompleteText = fetchedAutocompleteText;
+          const autocompleteTextContainer = document.createElement("span");
+          autocompleteTextContainer.id = "autocomplete-text";
+          autocompleteTextContainer.textContent = autocompleteText;
+          ghostTextarea.appendChild(autocompleteTextContainer);
+          textarea.classList.add("expanded-textarea");  
         } else {
           fetchState = "error";
         }
-        const autocompleteTextContainer = document.createElement("span");
-        autocompleteTextContainer.id = "autocomplete-text";
-        autocompleteTextContainer.textContent = autocompleteText;
-        ghostTextarea.appendChild(autocompleteTextContainer);
       }
     }, 200);
   }
