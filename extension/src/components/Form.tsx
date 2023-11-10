@@ -17,6 +17,7 @@ export const FormContainer = () => {
         }}
         id={"show-form-button"}
         style={{
+          alignSelf: "center",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -24,9 +25,9 @@ export const FormContainer = () => {
           color: colors.text.primary,
           border: "none",
           borderRadius: "50%",
-          width: "1.5em",
-          height: "1.5em",
-          fontSize: "12px",
+          width: "1.25em",
+          height: "1.25em",
+          fontSize: "10px",
           lineHeight: 1,
           cursor: "pointer",
           textAlign: "center",

@@ -6,6 +6,7 @@ export const styles = {
     body: {
       bg: colors.brand.background,
       color: "#fff",
+      minWidth: "100vw",
     },
     // styles for the `a`
     a: {

@@ -10,7 +10,6 @@ export const Prompts = () => {
   return (
     <Flex
       flexDir={"column"}
-      maxH={"16rem"}
       overflow={"scroll"}
       bgColor={"brand.cardBackground"}
       gap={"0.25rem"}
@@ -76,6 +75,7 @@ const handlePaste = ({
   prompt: Prompt;
 }) => {
   e.preventDefault();
+  console.log("paste");
   chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
     if (tabs[0] && tabs[0].id) {
       chrome.tabs.sendMessage(tabs[0].id, {

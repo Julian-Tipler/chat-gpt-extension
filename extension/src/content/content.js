@@ -27,18 +27,18 @@ window.addEventListener("load", () => {
 
   function setListeners({ textarea, ghostTextarea, form }) {
     textarea.addEventListener("input", () => {
-      // console.log("input detected");
-      fetchState = "idle";
+      // sets LastInput to now, resets fetchState (since autocompleteText is reset)
       lastInput = Date.now();
-      const textareaText = textarea.value.replace(/\n/g, "<br>");
-      ghostTextarea.innerHTML = textareaText;
+
+      // This deletes the existing autocompleteTextContainer
+      syncGhostTextarea({ textarea, ghostTextarea });
+      fetchState = "idle";
     });
     form.addEventListener("submit", () => {
-      // console.log("form submitted");
-      fetchState = "idle";
       lastInput = Date.now();
-      ghostTextarea.innerHTML = "";
-      console.log(ghostTextarea);
+
+      syncGhostTextarea({ textarea, ghostTextarea });
+      fetchState = "idle";
     });
     document.addEventListener("keydown", (e) => {
       if (e.key === "Tab") {
@@ -71,7 +71,7 @@ window.addEventListener("load", () => {
           autocompleteTextContainer.id = "autocomplete-text";
           autocompleteTextContainer.textContent = autocompleteText;
           ghostTextarea.appendChild(autocompleteTextContainer);
-          textarea.classList.add("expanded-textarea");  
+          textarea.classList.add("expanded-textarea");
         } else {
           fetchState = "error";
         }
@@ -79,6 +79,11 @@ window.addEventListener("load", () => {
     }, 200);
   }
 });
+
+const syncGhostTextarea = ({ textarea, ghostTextarea }) => {
+  const textareaText = textarea.value.replace(/\n/g, "<br>");
+  ghostTextarea.innerHTML = textareaText;
+};
 
 async function fetchAutocomplete({ textarea }) {
   const apiUrl =
@@ -101,4 +106,24 @@ async function fetchAutocomplete({ textarea }) {
     .catch((error) => {
       console.error("error", error);
     });
+}
+
+// PROMPTS
+chrome.runtime.onMessage.addListener(function(request) {
+  console.log("request", request);
+  switch (request.action) {
+    case "changeText":
+      changeText(request.text);
+      break;
+  }
+});
+
+function changeText(text) {
+  const textarea = document.querySelector("textarea");
+  if (textarea) {
+    console.log("triggered");
+    textarea.value += text;
+    textarea.dispatchEvent(new Event("input", { bubbles: true }));
+    textarea.focus();
+  }
 }
