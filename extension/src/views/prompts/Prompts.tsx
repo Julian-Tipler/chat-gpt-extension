@@ -2,25 +2,57 @@ import React from "react";
 import { Prompt } from "./PromptsPage";
 import { usePrompts } from "../../contexts/PromptsContext";
 import { Flex } from "@chakra-ui/layout";
+import { colors } from "../../theme";
+import { useDisclosure } from "@chakra-ui/hooks";
+import { NewPromptModal } from "./NewPromptModal";
 
 export const Prompts = () => {
   const { prompts } = usePrompts();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   if (prompts.length === 0) return <div>No prompts</div>;
+
   return (
-    <Flex
-      flexDir={"column"}
-      maxH={"16rem"}
-      overflow={"scroll"}
-      bgColor={"brand.cardBackground"}
-      gap={"0.25rem"}
-      borderRadius={"0.25rem"}
-      padding={"0.25rem"}
-    >
-      {prompts.map((prompt, index) => (
-        <Prompt key={index} prompt={prompt} />
-      ))}
-    </Flex>
+    <>
+      <Flex
+        flexDir={"column"}
+        overflow={"scroll"}
+        bgColor={"brand.cardBackground"}
+        gap={"0.25rem"}
+        borderRadius={"0.25rem"}
+        padding={"0.25rem"}
+      >
+        {prompts.map((prompt, index) => (
+          <Prompt key={index} prompt={prompt} />
+        ))}
+        <button
+          onClick={onOpen}
+          id={"show-form-button"}
+          style={{
+            alignSelf: "center",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: colors.brand.primary,
+            color: colors.text.primary,
+            border: "none",
+            borderRadius: "50%",
+            width: "1.25em",
+            height: "1.25em",
+            fontSize: "10px",
+            lineHeight: 1,
+            cursor: "pointer",
+            textAlign: "center",
+            outline: "none",
+            alignContent: "center",
+            flexShrink: 0,
+          }}
+        >
+          +
+        </button>
+      </Flex>
+      <NewPromptModal isOpen={isOpen} onClose={onClose} />
+    </>
   );
 };
 
@@ -76,6 +108,7 @@ const handlePaste = ({
   prompt: Prompt;
 }) => {
   e.preventDefault();
+  console.log("paste");
   chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
     if (tabs[0] && tabs[0].id) {
       chrome.tabs.sendMessage(tabs[0].id, {

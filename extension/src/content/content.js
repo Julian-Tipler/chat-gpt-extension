@@ -1,113 +1,116 @@
-console.log("content.js 🚀");
+console.log("Hello from content.js");
 
-// AUTOCOMPLETE
-// UI variables
-
-document.addEventListener("DOMContentLoaded", function() {
-  console.log("content.js DOM content loaded");
-  // Your code to query the textarea element here
-  let autocompleteText = "";
-  const textArea =
-    document.querySelector('input[type="text"]') ||
-    document.querySelector("textarea");
-  console.log(textArea);
-
-  const textAreaContainer = textArea.parentNode;
-
-  const ghostTextArea = document.createElement("div");
-  ghostTextArea.classList.add("ghost-text-area");
-  ghostTextArea.setAttribute("contenteditable", true);
-  textAreaContainer.appendChild(ghostTextArea);
-
+window.addEventListener("load", () => {
+  //existing elements
+  const textarea = document.querySelector("textarea");
+  const container = textarea ? textarea.parentElement : null;
   const form = document.querySelector("form");
-  form.addEventListener("submit", function() {
-    syncGhostTextArea();
-    resetAutocompleteText();
-  });
 
-  // Listeners
-  textArea.addEventListener("input", () => {
-    lastInputTime = Date.now();
-    syncGhostTextArea();
-  });
-  let lastInputTime = Date.now();
-  const DELAY_AFTER_TYPING = 500;
-  setInterval(maybeAddAutocomplete, 200);
+  //create new elements
+  const ghostTextarea = document.createElement("div");
+  ghostTextarea.classList.add("ghost-textarea");
+  ghostTextarea.setAttribute("contenteditable", "true");
+  container.appendChild(ghostTextarea);
 
-  document.addEventListener("keydown", function(event) {
-    if (event.key === "Tab") {
-      event.preventDefault();
-      textArea.value += autocompleteText;
-      resetAutocompleteText();
-      textArea.dispatchEvent(new Event("input", { bubbles: true }));
-      textArea.focus();
-    }
-  });
+  ghostTextarea.innerHTML = "";
+  let lastInput = Date.now();
+  let fetchState = "idle";
 
-  //Functions
-  function syncGhostTextArea() {
-    const newText = textArea.value.replace(/\n/g, "<br>");
+  let autocompleteText = "";
 
-    ghostTextArea.innerHTML = newText;
-    const autocompleteTextContainer = document.createElement("span");
-    autocompleteTextContainer.id = "autocomplete-text";
-    autocompleteText = "";
-    autocompleteTextContainer.textContent = autocompleteText;
-    ghostTextArea.appendChild(autocompleteTextContainer);
+  // Check if a textarea element was found
+  if (textarea && container && form) {
+    setListeners({ textarea, ghostTextarea, container, form });
+  } else {
+    console.log("No textarea found on the page.");
   }
 
-  function resetAutocompleteText() {
-    const autocompleteTextContainer = document.getElementById(
-      "autocomplete-text"
-    );
-    autocompleteText = "";
-    autocompleteTextContainer.textContent = autocompleteText;
-  }
-  async function maybeAddAutocomplete() {
-    // Has it been enough time since last user input and is the text itself long enough to warrant a fetch?
-    if (
-      Date.now() - lastInputTime >= DELAY_AFTER_TYPING &&
-      textArea.value.length > 10 &&
-      autocompleteText === ""
-    ) {
-      const autocomplete = await fetchAutocomplete();
-      addautocompleteText(autocomplete);
-    }
-  }
-  function addautocompleteText(autocomplete) {
-    const existingautocompleteTextContainer = document.getElementById(
-      "autocomplete-text"
-    );
-    autocompleteText = autocomplete;
-    existingautocompleteTextContainer.textContent = autocompleteText;
-  }
+  function setListeners({ textarea, ghostTextarea, form }) {
+    textarea.addEventListener("input", () => {
+      // sets LastInput to now, resets fetchState (since autocompleteText is reset)
+      lastInput = Date.now();
 
-  function fetchAutocomplete() {
-    // Fetch a recommendation from your ChatGPT API
-    const content = textArea.textContent;
-    const apiUrl =
-      "http://localhost:54321/functions/v1/autocomplete?userId=80c39e74-7767-44a4-b6cf-2b2baa040a71";
-    const accessToken = import.meta.env.VITE_WISE_API_TOKEN;
-    return fetch(apiUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify({ content }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        return data.autocomplete;
-      })
-      .catch((error) => {
-        console.error("error", error);
-      });
+      // This deletes the existing autocompleteTextContainer
+      syncGhostTextarea({ textarea, ghostTextarea });
+      fetchState = "idle";
+    });
+    form.addEventListener("submit", () => {
+      lastInput = Date.now();
+
+      syncGhostTextarea({ textarea, ghostTextarea });
+      fetchState = "idle";
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Tab") {
+        e.preventDefault();
+        textarea.value += autocompleteText;
+        autocompleteText = "";
+        // This input should reset the ghostTextarea, deleting the span in the process
+        textarea.dispatchEvent(new Event("input", { bubbles: true }));
+        textarea.focus();
+      }
+    });
+    setInterval(async () => {
+      if (
+        // it has been 1 second since last input
+        Date.now() - lastInput > 400 &&
+        // and fetch state is idle
+        fetchState === "idle" &&
+        // there is more than 10 characters in the textarea
+        ghostTextarea.innerHTML.length > 10
+      ) {
+        fetchState = "fetching";
+        const fetchedAutocompleteText = await fetchAutocomplete({
+          fetchState,
+          textarea,
+        });
+        if (fetchedAutocompleteText) {
+          fetchState = "fetched";
+          autocompleteText = fetchedAutocompleteText;
+          const autocompleteTextContainer = document.createElement("span");
+          autocompleteTextContainer.id = "autocomplete-text";
+          autocompleteTextContainer.textContent = autocompleteText;
+          ghostTextarea.appendChild(autocompleteTextContainer);
+          textarea.classList.add("expanded-textarea");
+        } else {
+          fetchState = "error";
+        }
+      }
+    }, 200);
   }
 });
 
+const syncGhostTextarea = ({ textarea, ghostTextarea }) => {
+  const textareaText = textarea.value.replace(/\n/g, "<br>");
+  ghostTextarea.innerHTML = textareaText;
+};
+
+async function fetchAutocomplete({ textarea }) {
+  const apiUrl =
+    "https://cgkxgakdjiogfenpxrxi.supabase.co/functions/v1/autocomplete?userId=a4e36a9e-cc7b-4a17-9812-0c71ed69b8c3";
+  const accessToken = import.meta.env.VITE_WISE_API_TOKEN;
+  const content = textarea.textContent;
+  return fetch(apiUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify({ content }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      return data.autocomplete;
+    })
+    .catch((error) => {
+      console.error("error", error);
+    });
+}
+
 // PROMPTS
 chrome.runtime.onMessage.addListener(function(request) {
+  console.log("request", request);
   switch (request.action) {
     case "changeText":
       changeText(request.text);
@@ -116,8 +119,11 @@ chrome.runtime.onMessage.addListener(function(request) {
 });
 
 function changeText(text) {
-  const searchBar = document.getElementById("prompt-textarea");
-  if (searchBar) {
-    searchBar.value += text;
+  const textarea = document.querySelector("textarea");
+  if (textarea) {
+    console.log("triggered");
+    textarea.value += text;
+    textarea.dispatchEvent(new Event("input", { bubbles: true }));
+    textarea.focus();
   }
 }

@@ -1,7 +1,6 @@
 //
 import { Title } from "../../components/Title";
-import { FormContainer } from "../../components/Form";
-import { Prompts } from "./PromptsForm";
+import { Prompts } from "./Prompts";
 import { Flex } from "@chakra-ui/layout";
 
 export type Prompt = {
@@ -16,13 +15,13 @@ export const PromptsPage = () => {
       flexDir={"column"}
       className="main-container"
       justifyContent={"center"}
-      width={"300px"}
       padding={"20px"}
-      backgroundColor={"#444654"}
-      borderRadius={"0.5em"}
+      backgroundColor={"brand.background"}
+      borderRadius={"0.5rem"}
+      overflowY={"auto"}
+      maxHeight={"600px"}
     >
       <Title />
-      <FormContainer />
       <Prompts />
     </Flex>
   );

@@ -2,7 +2,7 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 import { Prompt } from "../views/prompts/PromptsPage";
 import { readPromptsDataservice } from "../services/readPromptsDataservice";
 import { createPromptDataservice } from "../services/createPromptDataservice";
-import { PromptFormState } from "../components/Form";
+import { PromptFormState } from "../views/prompts/NewPromptModal";
 import { deletePromptDataservice } from "../services/deletePromptDataservice";
 
 interface PromptsContextType {

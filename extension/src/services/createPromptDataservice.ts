@@ -1,4 +1,4 @@
-import { PromptFormState } from "../components/Form";
+import { PromptFormState } from "../views/prompts/NewPromptModal";
 
 export const createPromptDataservice = async (form: PromptFormState) => {
   return new Promise<void>((resolve) => {
