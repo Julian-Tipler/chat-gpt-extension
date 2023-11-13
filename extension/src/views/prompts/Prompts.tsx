@@ -10,8 +10,6 @@ export const Prompts = () => {
   const { prompts } = usePrompts();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  if (prompts.length === 0) return <div>No prompts</div>;
-
   return (
     <>
       <Flex
@@ -108,7 +106,6 @@ const handlePaste = ({
   prompt: Prompt;
 }) => {
   e.preventDefault();
-  console.log("paste");
   chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
     if (tabs[0] && tabs[0].id) {
       chrome.tabs.sendMessage(tabs[0].id, {

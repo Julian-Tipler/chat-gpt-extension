@@ -1,5 +1,4 @@
 //
-import { Title } from "../../components/Title";
 import { Prompts } from "./Prompts";
 import { Flex } from "@chakra-ui/layout";
 
@@ -19,9 +18,7 @@ export const PromptsPage = () => {
       backgroundColor={"brand.background"}
       borderRadius={"0.5rem"}
       overflowY={"auto"}
-      maxHeight={"600px"}
     >
-      <Title />
       <Prompts />
     </Flex>
   );

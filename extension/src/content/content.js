@@ -37,6 +37,7 @@ window.addEventListener("load", () => {
     form.addEventListener("submit", () => {
       lastInput = Date.now();
 
+      // TODO it appears that some ghostText may remain
       syncGhostTextarea({ textarea, ghostTextarea });
       fetchState = "idle";
     });
