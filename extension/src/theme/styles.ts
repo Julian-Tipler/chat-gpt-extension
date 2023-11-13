@@ -4,7 +4,6 @@ export const styles = {
   global: {
     html: {
       fontSize: "16px",
-      overflowY: "hidden",
       borderRadius: "10px"
     },
     // styles for the `body`
