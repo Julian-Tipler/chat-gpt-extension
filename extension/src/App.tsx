@@ -17,9 +17,8 @@ const App = () => {
       element: (
         <Flex
           className="app"
-          maxHeight={"100%"}
-          border={"solid red 2px"}
-          overflow={"hidden"}
+          //Matches height of body
+          height={"100%"}
           flexDirection={"column"}
         >
           <Outlet />

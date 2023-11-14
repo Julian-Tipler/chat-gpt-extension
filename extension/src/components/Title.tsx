@@ -7,7 +7,7 @@ export const Title = () => {
       color={"brand.primary"}
       textAlign={"center"}
     >
-      Wise-GPT
+      WiseGPT
     </Heading>
   );
 };

@@ -11,13 +11,14 @@ export type Prompt = {
 export const PromptsPage = () => {
   return (
     <Flex
-      flexDir={"column"}
       className="main-container"
+      flexDir={"column"}
       justifyContent={"center"}
+      flex={1}
       padding={"20px"}
       backgroundColor={"brand.background"}
       borderRadius={"0.5rem"}
-      overflowY={"auto"}
+      overflow={"hidden"}
     >
       <Prompts />
     </Flex>

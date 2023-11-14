@@ -1,6 +1,4 @@
-.expanded-textarea {
-  padding-bottom: 30px;
-}
+
 .ghost-textarea {
   position: absolute; 
   width: 100%;
@@ -17,7 +15,8 @@
   margin: 0;
   background-color: transparent;
   pointer-events: none;
-  color: transparent;
+  color: green;
+  white-space: pre-wrap;
 }
 
 @media screen and (min-width: 768px) {
@@ -35,4 +34,8 @@
 #autocomplete-text {
   color: gray;
   opacity: 1;
+}
+
+.expanded-textarea {
+  padding-bottom: 50px !important;
 }

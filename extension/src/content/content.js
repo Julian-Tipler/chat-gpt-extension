@@ -70,20 +70,28 @@ window.addEventListener("load", () => {
           autocompleteText = fetchedAutocompleteText;
           const autocompleteTextContainer = document.createElement("span");
           autocompleteTextContainer.id = "autocomplete-text";
+          if (textarea.textContent.slice(-1) !== " ") {
+            autocompleteText = " " + autocompleteText;
+          }
           autocompleteTextContainer.textContent = autocompleteText;
+
+          // <add code here that checks for the last character of textarea and adds a space if it's not a space>
           ghostTextarea.appendChild(autocompleteTextContainer);
           textarea.classList.add("expanded-textarea");
+          ghostTextarea.classList.add("expanded-textarea");
         } else {
           fetchState = "error";
         }
       }
-    }, 200);
+    }, 50);
   }
 });
 
 const syncGhostTextarea = ({ textarea, ghostTextarea }) => {
-  const textareaText = textarea.value.replace(/\n/g, "<br>");
-  ghostTextarea.innerHTML = textareaText;
+  console.log("textareaText", textarea);
+  ghostTextarea.innerHTML = "";
+  ghostTextarea.innerText = textarea.value;
+  console.log("ghostTextarea", ghostTextarea);
 };
 
 async function fetchAutocomplete({ textarea }) {
@@ -122,8 +130,12 @@ chrome.runtime.onMessage.addListener(function(request) {
 function changeText(text) {
   const textarea = document.querySelector("textarea");
   if (textarea) {
-    console.log("triggered");
-    textarea.value += text;
+    const currentText = textarea.value.trim();
+    if (currentText !== "") {
+      textarea.value += "\n\n" + text;
+    } else {
+      textarea.value += text;
+    }
     textarea.dispatchEvent(new Event("input", { bubbles: true }));
     textarea.focus();
   }

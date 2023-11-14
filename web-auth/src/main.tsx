@@ -9,7 +9,7 @@ const theme = extendTheme({ colors, components, styles });
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ChakraProvider theme={theme}>
+    <ChakraProvider resetCSS theme={theme}>
       <App />
     </ChakraProvider>
   </React.StrictMode>
