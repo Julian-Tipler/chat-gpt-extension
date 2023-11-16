@@ -34,16 +34,13 @@ window.addEventListener("load", () => {
       syncGhostTextarea({ textarea, ghostTextarea });
       fetchState = "idle";
     });
-    form.addEventListener("submit", () => {
-      lastInput = Date.now();
-
-      // TODO it appears that some ghostText may remain
-      syncGhostTextarea({ textarea, ghostTextarea });
-      fetchState = "idle";
+    textarea.addEventListener("scroll", function() {
+      ghostTextarea.style.transform = "translateY(" + -this.scrollTop + "px)";
     });
     document.addEventListener("keydown", (e) => {
       if (e.key === "Tab") {
         e.preventDefault();
+        console.log(autocompleteText);
         textarea.value += autocompleteText;
         autocompleteText = "";
         // This input should reset the ghostTextarea, deleting the span in the process
@@ -51,6 +48,14 @@ window.addEventListener("load", () => {
         textarea.focus();
       }
     });
+    form.addEventListener("submit", () => {
+      lastInput = Date.now();
+
+      // TODO it appears that some ghostText may remain
+      resetGhostTextarea({ ghostTextarea });
+      fetchState = "idle";
+    });
+    textarea.addEventListener("scroll", () => {});
     setInterval(async () => {
       if (
         // it has been 1 second since last input
@@ -60,6 +65,7 @@ window.addEventListener("load", () => {
         // there is more than 10 characters in the textarea
         ghostTextarea.innerHTML.length > 10
       ) {
+        console.log("running this function");
         fetchState = "fetching";
         const fetchedAutocompleteText = await fetchAutocomplete({
           fetchState,
@@ -83,15 +89,17 @@ window.addEventListener("load", () => {
           fetchState = "error";
         }
       }
-    }, 50);
+    }, 51);
   }
 });
 
 const syncGhostTextarea = ({ textarea, ghostTextarea }) => {
-  console.log("textareaText", textarea);
   ghostTextarea.innerHTML = "";
   ghostTextarea.innerText = textarea.value;
-  console.log("ghostTextarea", ghostTextarea);
+};
+
+const resetGhostTextarea = ({ ghostTextarea }) => {
+  ghostTextarea.innerHTML = "";
 };
 
 async function fetchAutocomplete({ textarea }) {
