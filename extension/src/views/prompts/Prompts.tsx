@@ -10,49 +10,30 @@ export const Prompts = () => {
   const { prompts } = usePrompts();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  if (prompts.length === 0) return <div>No prompts</div>;
-
   return (
-    <>
+    <Flex
+      className="item-and-button-container"
+      bgColor={"brand.cardBackground"}
+      borderRadius={"0.25rem"}
+      flexDirection={"column"}
+      flex={1}
+      overflow={"hidden"}
+    >
       <Flex
+        className="item-container"
         flexDir={"column"}
-        overflow={"scroll"}
-        bgColor={"brand.cardBackground"}
         gap={"0.25rem"}
-        borderRadius={"0.25rem"}
+        flex={1}
         padding={"0.25rem"}
+        overflow={"scroll"}
       >
         {prompts.map((prompt, index) => (
           <Prompt key={index} prompt={prompt} />
         ))}
-        <button
-          onClick={onOpen}
-          id={"show-form-button"}
-          style={{
-            alignSelf: "center",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: colors.brand.primary,
-            color: colors.text.primary,
-            border: "none",
-            borderRadius: "50%",
-            width: "1.25em",
-            height: "1.25em",
-            fontSize: "10px",
-            lineHeight: 1,
-            cursor: "pointer",
-            textAlign: "center",
-            outline: "none",
-            alignContent: "center",
-            flexShrink: 0,
-          }}
-        >
-          +
-        </button>
       </Flex>
       <NewPromptModal isOpen={isOpen} onClose={onClose} />
-    </>
+      <PlusButton onOpen={onOpen} />
+    </Flex>
   );
 };
 
@@ -100,6 +81,36 @@ const Prompt = ({ prompt }: { prompt: Prompt }) => {
   );
 };
 
+const PlusButton = ({ onOpen }: { onOpen: () => void }) => {
+  return (
+    <button
+      onClick={onOpen}
+      id={"show-form-button"}
+      style={{
+        alignSelf: "center",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: colors.brand.primary,
+        color: colors.text.primary,
+        border: "none",
+        borderRadius: "50%",
+        width: "1.25em",
+        height: "1.25em",
+        fontSize: "10px",
+        lineHeight: 1,
+        cursor: "pointer",
+        textAlign: "center",
+        outline: "none",
+        alignContent: "center",
+        flexShrink: 0,
+      }}
+    >
+      +
+    </button>
+  );
+};
+
 const handlePaste = ({
   e,
   prompt,
@@ -108,7 +119,6 @@ const handlePaste = ({
   prompt: Prompt;
 }) => {
   e.preventDefault();
-  console.log("paste");
   chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
     if (tabs[0] && tabs[0].id) {
       chrome.tabs.sendMessage(tabs[0].id, {
