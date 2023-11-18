@@ -14,9 +14,20 @@ window.addEventListener("load", () => {
   // textarea and ghostTextarea are now siblings
 
   let lastInput = Date.now();
-  let fetchState = "idle";
+  const fetchStates = {
+    idle: "idle",
+    fetching: "fetching",
+    fetched: "fetched",
+    error: "error",
+  };
+  let fetchState = fetchStates.idle;
 
   let autocompleteText = "";
+
+  const debuggingLogger = (text) => {
+    text && console.log(text);
+    console.log(fetchState);
+  };
 
   // Check if a textarea element was found and set listeners
   if (textarea && parent && form) {
@@ -32,7 +43,7 @@ window.addEventListener("load", () => {
 
       // This deletes the existing autocompleteTextContainer
       syncGhostTextarea({ textarea, ghostTextarea });
-      fetchState = "idle";
+      fetchState = fetchStates.idle;
     });
     textarea.addEventListener("scroll", function() {
       ghostTextarea.style.transform = "translateY(" + -this.scrollTop + "px)";
@@ -40,38 +51,44 @@ window.addEventListener("load", () => {
     document.addEventListener("keydown", (e) => {
       if (e.key === "Tab") {
         e.preventDefault();
-        console.log(autocompleteText);
         textarea.value += autocompleteText;
         autocompleteText = "";
         // This input should reset the ghostTextarea, deleting the span in the process
         textarea.dispatchEvent(new Event("input", { bubbles: true }));
         textarea.focus();
+        debuggingLogger("keydown (tab) event");
       }
     });
     form.addEventListener("submit", () => {
+      debuggingLogger("submit event");
+
       lastInput = Date.now();
 
       // TODO it appears that some ghostText may remain
       resetGhostTextarea({ ghostTextarea });
-      fetchState = "idle";
+      fetchState = fetchStates.idle;
     });
     setInterval(async () => {
       if (
         // it has been 1 second since last input
-        Date.now() - lastInput > 400 &&
+        Date.now() - lastInput >= 200 &&
         // and fetch state is idle
-        fetchState === "idle" &&
+        fetchState === fetchStates.idle &&
         // there is more than 10 characters in the textarea
         ghostTextarea.innerHTML.length > 10
       ) {
-        console.log("running this function");
-        fetchState = "fetching";
+        fetchState = fetchStates.fetching;
+        debuggingLogger("before fetchAutocomplete event");
         const fetchedAutocompleteText = await fetchAutocomplete({
-          fetchState,
           textarea,
         });
+        debuggingLogger("after fetchAutocomplete event");
+        if (fetchState === fetchStates.idle) {
+          // do nothing with the response
+          return;
+        }
         if (fetchedAutocompleteText) {
-          fetchState = "fetched";
+          fetchState = fetchStates.fetched;
           autocompleteText = fetchedAutocompleteText;
           const autocompleteTextContainer = document.createElement("span");
           autocompleteTextContainer.id = "autocomplete-text";
@@ -85,10 +102,10 @@ window.addEventListener("load", () => {
           textarea.classList.add("expanded-textarea");
           ghostTextarea.classList.add("expanded-textarea");
         } else {
-          fetchState = "error";
+          fetchState = fetchStates.error;
         }
       }
-    }, 51);
+    }, 200);
   }
 });
 
