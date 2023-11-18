@@ -1,33 +1,33 @@
-console.log("Hello from content.js");
+console.log("content.js 🚀");
 
 window.addEventListener("load", () => {
-  //existing elements
+  // existing elements
   const textarea = document.querySelector("textarea");
-  const container = textarea ? textarea.parentElement : null;
+  const parent = textarea ? textarea.parentElement : null;
   const form = document.querySelector("form");
 
-  //create new elements
+  // create new elements
   const ghostTextarea = document.createElement("div");
   ghostTextarea.classList.add("ghost-textarea");
   ghostTextarea.setAttribute("contenteditable", "true");
-  container.appendChild(ghostTextarea);
+  parent.appendChild(ghostTextarea);
+  // textarea and ghostTextarea are now siblings
 
-  ghostTextarea.innerHTML = "";
   let lastInput = Date.now();
   let fetchState = "idle";
 
   let autocompleteText = "";
 
-  // Check if a textarea element was found
-  if (textarea && container && form) {
-    setListeners({ textarea, ghostTextarea, container, form });
+  // Check if a textarea element was found and set listeners
+  if (textarea && parent && form) {
+    setListeners({ textarea, ghostTextarea, parent, form });
   } else {
     console.log("No textarea found on the page.");
   }
 
   function setListeners({ textarea, ghostTextarea, form }) {
+    // Resets the lastInput, ghostTextarea, and fetchState
     textarea.addEventListener("input", () => {
-      // sets LastInput to now, resets fetchState (since autocompleteText is reset)
       lastInput = Date.now();
 
       // This deletes the existing autocompleteTextContainer
@@ -55,7 +55,6 @@ window.addEventListener("load", () => {
       resetGhostTextarea({ ghostTextarea });
       fetchState = "idle";
     });
-    textarea.addEventListener("scroll", () => {});
     setInterval(async () => {
       if (
         // it has been 1 second since last input
@@ -93,6 +92,8 @@ window.addEventListener("load", () => {
   }
 });
 
+// Resets any spans and then updates the innerText to match the ghostTextarea text
+// TODO maybe I should include space/paragraph logic here?
 const syncGhostTextarea = ({ textarea, ghostTextarea }) => {
   ghostTextarea.innerHTML = "";
   ghostTextarea.innerText = textarea.value;
@@ -124,6 +125,16 @@ async function fetchAutocomplete({ textarea }) {
       console.error("error", error);
     });
 }
+
+//
+
+//
+
+//
+
+//
+
+//
 
 // PROMPTS
 chrome.runtime.onMessage.addListener(function(request) {
