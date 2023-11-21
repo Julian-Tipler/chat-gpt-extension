@@ -1,4 +1,4 @@
-console.log("background.js 🚀");
+console.log("background.js 🚀🚀🚀");
 
 // chrome.runtime.onInstalled.addListener(({ reason }) => {
 //   console.log("reason", reason);
@@ -8,15 +8,22 @@ console.log("background.js 🚀");
 //     });
 //   }
 // });
-chrome.runtime.onMessageExternal.addListener((message) => {
-  console.log("message", message);
-  switch (message.action) {
-    case "saveWiseSessionToken":
-      saveWiseSessionToken(message.token);
-      break;
+chrome.runtime.onMessageExternal.addListener(
+  (request, sender, sendResponse) => {
+    console.log("request", request);
+    switch (request.action) {
+      case "saveWiseSessionToken":
+        saveWiseSessionToken(request.token);
+        if (request.token) {
+          sendResponse({ success: true, message: "Token has been received" });
+        } else {
+          sendResponse({ success: false, message: "Token is empty" });
+        }
+        break;
+    }
+    return true;
   }
-  return true;
-});
+);
 
 function saveWiseSessionToken(token) {
   console.log("saveWiseSessionToken", token);

@@ -5,7 +5,7 @@ window.addEventListener("load", () => {
   const textarea = document.querySelector("textarea");
   const parent = textarea ? textarea.parentElement : null;
   const form = document.querySelector("form");
-  
+
   // create new elements
   const wiseTextarea = document.createElement("div");
   wiseTextarea.classList.add("wise-textarea");
@@ -135,10 +135,7 @@ const resetWiseTextarea = ({ autocompleteText, ghostText }) => {
 };
 
 async function fetchAutocomplete({ textarea, controller }) {
-  const apiUrl =
-    import.meta.env.VITE_API_URL +
-    "/functions/v1/autocomplete?userId=" +
-    import.meta.env.VITE_API_USER_ID;
+  const apiUrl = import.meta.env.VITE_API_URL + "/functions/v1/autocomplete";
 
   const accessToken = import.meta.env.VITE_WISE_API_TOKEN;
   const content = textarea.textContent;
@@ -157,6 +154,10 @@ async function fetchAutocomplete({ textarea, controller }) {
       return data.autocomplete;
     })
     .catch((error) => {
+      if (error.name === `AbortError`) {
+        console.log(`--fetch aborted--`);
+        return;
+      }
       console.error("error", error);
     });
 }
