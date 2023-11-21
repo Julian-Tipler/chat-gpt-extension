@@ -7,105 +7,136 @@ window.addEventListener("load", () => {
   const form = document.querySelector("form");
 
   // create new elements
-  const ghostTextarea = document.createElement("div");
-  ghostTextarea.classList.add("ghost-textarea");
-  ghostTextarea.setAttribute("contenteditable", "true");
-  parent.appendChild(ghostTextarea);
-  // textarea and ghostTextarea are now siblings
+  const wiseTextarea = document.createElement("div");
+  wiseTextarea.classList.add("wise-textarea");
+  wiseTextarea.setAttribute("contenteditable", "true");
+  parent.appendChild(wiseTextarea);
+
+  const ghostText = document.createElement("span");
+  ghostText.id = "ghost-text";
+  wiseTextarea.appendChild(ghostText);
+
+  const autocompleteText = document.createElement("span");
+  autocompleteText.id = "autocomplete-text";
+  wiseTextarea.appendChild(autocompleteText);
+  // textarea and wiseTextarea are now siblings
 
   let lastInput = Date.now();
-  let fetchState = "idle";
+  const fetchStates = {
+    idle: "idle",
+    fetching: "fetching",
+    fetched: "fetched",
+    error: "error",
+  };
+  let fetchState = fetchStates.idle;
+  let controller = new AbortController();
 
-  let autocompleteText = "";
+  const debuggingLogger = (text) => {
+    text && console.log(text);
+    console.log(fetchState);
+  };
 
   // Check if a textarea element was found and set listeners
   if (textarea && parent && form) {
-    setListeners({ textarea, ghostTextarea, parent, form });
+    setListeners({ textarea, wiseTextarea, parent, form });
   } else {
     console.log("No textarea found on the page.");
   }
 
-  function setListeners({ textarea, ghostTextarea, form }) {
-    // Resets the lastInput, ghostTextarea, and fetchState
+  function setListeners({ textarea, wiseTextarea, form }) {
+    // Resets the lastInput, wiseTextarea, and fetchState
     textarea.addEventListener("input", () => {
       lastInput = Date.now();
 
-      // This deletes the existing autocompleteTextContainer
-      syncGhostTextarea({ textarea, ghostTextarea });
-      fetchState = "idle";
+      // This deletes the existing autocompleteText
+      syncGhostText({ textarea, ghostText });
+      autocompleteText.innerText = "";
+      fetchState = fetchStates.idle;
     });
     textarea.addEventListener("scroll", function() {
-      ghostTextarea.style.transform = "translateY(" + -this.scrollTop + "px)";
+      wiseTextarea.style.transform = "translateY(" + -this.scrollTop + "px)";
     });
     document.addEventListener("keydown", (e) => {
       if (e.key === "Tab") {
         e.preventDefault();
-        console.log(autocompleteText);
-        textarea.value += autocompleteText;
-        autocompleteText = "";
-        // This input should reset the ghostTextarea, deleting the span in the process
+        textarea.value += autocompleteText.innerText;
+        autocompleteText.innerText = "";
+        // This input should reset the wiseTextarea, deleting the span in the process
         textarea.dispatchEvent(new Event("input", { bubbles: true }));
         textarea.focus();
       }
+      if (e.keyCode === 13) {
+        controller.abort();
+        console.log("enter pushed");
+        autocompleteText.innerText = "";
+      }
     });
     form.addEventListener("submit", () => {
+      console.log("SUBMIT");
+
       lastInput = Date.now();
 
       // TODO it appears that some ghostText may remain
-      resetGhostTextarea({ ghostTextarea });
-      fetchState = "idle";
+      resetWiseTextarea({ autocompleteText, ghostText });
+      fetchState = fetchStates.idle;
     });
     setInterval(async () => {
       if (
         // it has been 1 second since last input
-        Date.now() - lastInput > 400 &&
+        Date.now() - lastInput >= 200 &&
         // and fetch state is idle
-        fetchState === "idle" &&
+        fetchState === fetchStates.idle &&
         // there is more than 10 characters in the textarea
-        ghostTextarea.innerHTML.length > 10
+        wiseTextarea.innerHTML.length > 10
       ) {
-        console.log("running this function");
-        fetchState = "fetching";
-        const fetchedAutocompleteText = await fetchAutocomplete({
-          fetchState,
-          textarea,
-        });
-        if (fetchedAutocompleteText) {
-          fetchState = "fetched";
-          autocompleteText = fetchedAutocompleteText;
-          const autocompleteTextContainer = document.createElement("span");
-          autocompleteTextContainer.id = "autocomplete-text";
-          if (textarea.textContent.slice(-1) !== " ") {
-            autocompleteText = " " + autocompleteText;
-          }
-          autocompleteTextContainer.textContent = autocompleteText;
+        controller.abort();
+        controller = new AbortController();
 
-          // <add code here that checks for the last character of textarea and adds a space if it's not a space>
-          ghostTextarea.appendChild(autocompleteTextContainer);
+        fetchState = fetchStates.fetching;
+        debuggingLogger("before fetchAutocomplete event");
+        const fetchedAutocompleteText = await fetchAutocomplete({
+          textarea,
+          controller,
+        });
+        debuggingLogger("after fetchAutocomplete event");
+        if (fetchState === fetchStates.idle) {
+          // do nothing with the response
+          return;
+        }
+        if (fetchedAutocompleteText) {
+          fetchState = fetchStates.fetched;
+          let newAutocompleteText = fetchedAutocompleteText;
+
+          if (textarea.textContent.slice(-1) !== " ") {
+            newAutocompleteText = " " + newAutocompleteText;
+          }
+          autocompleteText.textContent = newAutocompleteText;
+
           textarea.classList.add("expanded-textarea");
-          ghostTextarea.classList.add("expanded-textarea");
+          wiseTextarea.classList.add("expanded-textarea");
         } else {
-          fetchState = "error";
+          fetchState = fetchStates.error;
         }
       }
-    }, 51);
+    }, 200);
   }
 });
 
-// Resets any spans and then updates the innerText to match the ghostTextarea text
+// Resets any spans and then updates the innerText to match the wiseTextarea text
 // TODO maybe I should include space/paragraph logic here?
-const syncGhostTextarea = ({ textarea, ghostTextarea }) => {
-  ghostTextarea.innerHTML = "";
-  ghostTextarea.innerText = textarea.value;
+const syncGhostText = ({ textarea, ghostText }) => {
+  // wiseTextarea.innerHTML = "";
+  ghostText.innerText = textarea.value;
 };
 
-const resetGhostTextarea = ({ ghostTextarea }) => {
-  ghostTextarea.innerHTML = "";
+const resetWiseTextarea = ({ autocompleteText, ghostText }) => {
+  ghostText.innerText = "";
+  autocompleteText.innerText = "";
 };
 
-async function fetchAutocomplete({ textarea }) {
-  const apiUrl =
-    "https://cgkxgakdjiogfenpxrxi.supabase.co/functions/v1/autocomplete?userId=a4e36a9e-cc7b-4a17-9812-0c71ed69b8c3";
+async function fetchAutocomplete({ textarea, controller }) {
+  const apiUrl = import.meta.env.VITE_API_URL + "/functions/v1/autocomplete";
+
   const accessToken = import.meta.env.VITE_WISE_API_TOKEN;
   const content = textarea.textContent;
   return fetch(apiUrl, {
@@ -115,6 +146,7 @@ async function fetchAutocomplete({ textarea }) {
       Authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify({ content }),
+    signal: controller.signal,
   })
     .then((response) => response.json())
     .then((data) => {
@@ -122,6 +154,10 @@ async function fetchAutocomplete({ textarea }) {
       return data.autocomplete;
     })
     .catch((error) => {
+      if (error.name === `AbortError`) {
+        console.log(`--fetch aborted--`);
+        return;
+      }
       console.error("error", error);
     });
 }

@@ -90,6 +90,7 @@ async function loginAction({ request }: LoaderFunctionArgs) {
   const formData = await request.formData();
   const email = formData.get("email") as string | null;
   const password = formData.get("password") as string | null;
+  const redirectTo = formData.get("redirectTo") as string | null;
 
   // Validate our form inputs and return validation errors via useActionData()
   if (!email) {
@@ -107,15 +108,30 @@ async function loginAction({ request }: LoaderFunctionArgs) {
     await supabase.auth.signInWithPassword({ email, password });
     const session = await supabase.auth.getSession();
     const extensionId = import.meta.env.VITE_EXTENSION_ID;
-    console.log("Extension ID:", extensionId);
 
+    let success = false;
     if (session?.data?.session && chrome.runtime) {
-      console.log("Sending token to extension");
-      chrome.runtime.sendMessage(extensionId, {
-        action: "saveWiseSessionToken",
-        token: session.data.session,
-      });
+      chrome.runtime.sendMessage(
+        extensionId,
+        {
+          action: "saveWiseSessionToken",
+          token: session.data.session,
+        },
+        (response) => {
+          if (response?.success) {
+            success = true;
+            return redirect(redirectTo || "/");
+          } else {
+            console.error("Error saving token", response.error);
+            return redirect("/login");
+          }
+        }
+      );
     }
+    //actions have to return something so 🤷
+    return {
+      success,
+    };
   } catch (error) {
     // Unused as of now but this is how you would handle invalid
     // email/password combinations - just like validating the inputs
@@ -124,9 +140,6 @@ async function loginAction({ request }: LoaderFunctionArgs) {
       error: "Invalid login attempt",
     };
   }
-
-  const redirectTo = formData.get("redirectTo") as string | null;
-  return redirect(redirectTo || "/");
 }
 
 async function signupAction({ request }: LoaderFunctionArgs) {

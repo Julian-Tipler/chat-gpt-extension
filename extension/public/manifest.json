@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "ChatGPT prompts",
-  "description": "Insert prompts into chat gpt's text box",
+  "name": "WiseGPT",
+  "description": "Autocomplete and personal prompts for chat GPT.",
   "version": "1.0",
   "permissions": ["activeTab", "tabs", "storage", "scripting"],
   "action": {
