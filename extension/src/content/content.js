@@ -31,11 +31,6 @@ window.addEventListener("load", () => {
   let fetchState = fetchStates.idle;
   let controller = new AbortController();
 
-  const debuggingLogger = (text) => {
-    text && console.log(text);
-    console.log(fetchState);
-  };
-
   // Check if a textarea element was found and set listeners
   if (textarea && parent && form) {
     setListeners({ textarea, wiseTextarea, parent, form });
@@ -68,13 +63,10 @@ window.addEventListener("load", () => {
       }
       if (e.keyCode === 13) {
         controller.abort();
-        console.log("enter pushed");
         autocompleteText.innerText = "";
       }
     });
     form.addEventListener("submit", () => {
-      console.log("SUBMIT");
-
       lastInput = Date.now();
 
       // TODO it appears that some ghostText may remain
@@ -103,9 +95,7 @@ window.addEventListener("load", () => {
         const reader = response.body.getReader();
         const processStream = async () => {
           while (true) {
-            const temp = await reader.read();
-            console.log("temp", temp);
-            const { value, done } = temp;
+            const { value, done } = await reader.read();
             if (done) {
               console.log("Stream done");
               break;
@@ -127,15 +117,18 @@ window.addEventListener("load", () => {
             const validJsonStrings = jsonStrings.filter(
               (jsonString) => jsonString !== null
             );
-            console.log(validJsonStrings);
+
             const content = validJsonStrings
               .map(
                 (jsonObject) => JSON.parse(jsonObject).choices[0].delta.content
               )
               .join("");
-            console.log("content:", content);
 
-            autocompleteText.textContent += content;
+            autocompleteText.textContent +=
+              !autocompleteText.textContent.length &&
+              textarea.value.slice(-1) !== " "
+                ? " " + content
+                : content;
           }
         };
         if (fetchState === fetchStates.idle) {
@@ -182,7 +175,6 @@ async function fetchAutocomplete({ textarea, controller }) {
     })
     .catch((error) => {
       if (error.name === `AbortError`) {
-        console.log(`--fetch aborted--`);
         return;
       }
       console.error("error", error);
@@ -201,7 +193,6 @@ async function fetchAutocomplete({ textarea, controller }) {
 
 // PROMPTS
 chrome.runtime.onMessage.addListener(function(request) {
-  console.log("request", request);
   switch (request.action) {
     case "changeText":
       changeText(request.text);
