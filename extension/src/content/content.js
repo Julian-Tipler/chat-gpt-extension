@@ -61,6 +61,7 @@ window.addEventListener("load", () => {
         e.preventDefault();
         textarea.value += autocompleteText.innerText;
         autocompleteText.innerText = "";
+        controller.abort();
         // This input should reset the wiseTextarea, deleting the span in the process
         textarea.dispatchEvent(new Event("input", { bubbles: true }));
         textarea.focus();
@@ -87,36 +88,64 @@ window.addEventListener("load", () => {
         // and fetch state is idle
         fetchState === fetchStates.idle &&
         // there is more than 10 characters in the textarea
-        textarea.innerText.length > 10
+        textarea.value.length > 10
       ) {
         controller.abort();
         controller = new AbortController();
 
         fetchState = fetchStates.fetching;
-        debuggingLogger("before fetchAutocomplete event");
-        const fetchedAutocompleteText = await fetchAutocomplete({
+
+        const response = await fetchAutocomplete({
           textarea,
           controller,
         });
-        debuggingLogger("after fetchAutocomplete event");
+
+        const reader = response.body.getReader();
+        const processStream = async () => {
+          while (true) {
+            const temp = await reader.read();
+            console.log("temp", temp);
+            const { value, done } = temp;
+            if (done) {
+              console.log("Stream done");
+              break;
+            }
+
+            const chunkString = new TextDecoder("utf-8").decode(value);
+
+            const dataChunks = chunkString.split("data: ");
+            const nonEmptyChunks = dataChunks.filter(
+              (chunk) => chunk.trim() !== ""
+            );
+            const jsonStrings = nonEmptyChunks.map((chunk) => {
+              const trimmedChunk = chunk.trim();
+              if (trimmedChunk === "[DONE]") {
+                return null; // Skip further processing for [DONE] case
+              }
+              return trimmedChunk.replace(/^data:\s*/, "");
+            });
+            const validJsonStrings = jsonStrings.filter(
+              (jsonString) => jsonString !== null
+            );
+            console.log(validJsonStrings);
+            const content = validJsonStrings
+              .map(
+                (jsonObject) => JSON.parse(jsonObject).choices[0].delta.content
+              )
+              .join("");
+            console.log("content:", content);
+
+            autocompleteText.textContent += content;
+          }
+        };
         if (fetchState === fetchStates.idle) {
           // do nothing with the response
           return;
         }
-        if (fetchedAutocompleteText) {
-          fetchState = fetchStates.fetched;
-          let newAutocompleteText = fetchedAutocompleteText;
-
-          if (textarea.textContent.slice(-1) !== " ") {
-            newAutocompleteText = " " + newAutocompleteText;
-          }
-          autocompleteText.textContent = newAutocompleteText;
-
-          textarea.classList.add("expanded-textarea");
-          wiseTextarea.classList.add("expanded-textarea");
-        } else {
-          fetchState = fetchStates.error;
-        }
+        processStream();
+        fetchState = fetchStates.fetched;
+        textarea.classList.add("expanded-textarea");
+        wiseTextarea.classList.add("expanded-textarea");
       }
     }, 200);
   }
@@ -148,10 +177,8 @@ async function fetchAutocomplete({ textarea, controller }) {
     body: JSON.stringify({ content }),
     signal: controller.signal,
   })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-      return data.autocomplete;
+    .then((response) => {
+      return response;
     })
     .catch((error) => {
       if (error.name === `AbortError`) {
