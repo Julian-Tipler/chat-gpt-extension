@@ -87,7 +87,7 @@ window.addEventListener("load", () => {
         // and fetch state is idle
         fetchState === fetchStates.idle &&
         // there is more than 10 characters in the textarea
-        wiseTextarea.innerHTML.length > 10
+        textarea.innerText.length > 10
       ) {
         controller.abort();
         controller = new AbortController();
