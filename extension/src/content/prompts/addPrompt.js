@@ -1,4 +1,4 @@
-export function changeText(text) {
+export function addPrompt(text) {
   const textarea = document.querySelector("textarea");
   if (textarea) {
     const currentText = textarea.value.trim();

@@ -4,7 +4,7 @@ import { processStream } from "./autocomplete/helpers/processStream";
 import { addAutocompleteTextToTextArea } from "./autocomplete/addAutocompleteTextToTextArea";
 import FetchController from "./autocomplete/FetchController";
 import { fetchStates } from "./autocomplete/constants/fetchStates";
-import { changeText } from "./prompts/changeText";
+import { addPrompt } from "./prompts/addPrompt";
 
 console.log("content.js 🚀");
 const apiUrl = import.meta.env.VITE_API_URL + "/functions/v1/autocomplete";
@@ -161,7 +161,7 @@ async function fetchAutocomplete({ textarea, controller }) {
 chrome.runtime.onMessage.addListener(function(request) {
   switch (request.action) {
     case "changeText":
-      changeText(request.text);
+      addPrompt(request.text);
       break;
   }
 });
