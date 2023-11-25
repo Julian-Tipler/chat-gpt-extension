@@ -1,15 +1,11 @@
 console.log("content.js 🚀");
 import { syncGhostText } from "./ghostText/syncGhostText";
-import { resetWiseTextarea } from "./autocomplete/resetWiseTextarea";
+import { resetAutocompleteText } from "./autocomplete/resetAutocompleteText";
 import { processStream } from "./autocomplete/helpers/processStream";
 import { addAutocompleteTextToTextArea } from "./autocomplete/addAutocompleteTextToTextArea";
+import FetchController from "./autocomplete/FetchController";
+import { fetchStates } from "./autocomplete/constants/fetchStates";
 
-const fetchStates = {
-  idle: "idle",
-  fetching: "fetching",
-  fetched: "fetched",
-  error: "error",
-};
 const apiUrl = import.meta.env.VITE_API_URL + "/functions/v1/autocomplete";
 const accessToken = import.meta.env.VITE_WISE_API_TOKEN;
 
@@ -36,8 +32,7 @@ window.addEventListener("load", () => {
 
   let lastInput = Date.now();
 
-  let fetchState = fetchStates.idle;
-  let controller = new AbortController();
+  const fetchController = new FetchController();
 
   // Check if a textarea element was found and set listeners
   if (textarea && parent && form) {
@@ -50,11 +45,10 @@ window.addEventListener("load", () => {
     // Resets the lastInput, wiseTextarea, and fetchState
     textarea.addEventListener("input", () => {
       // autocomplete
-      controller.abort();
-      controller = new AbortController();
-      lastInput = Date.now();
-      fetchState = fetchStates.idle;
-      autocompleteText.innerText = "";
+      // fetchController.controller.abort();
+      // fetchController.controller = new AbortController();
+      fetchController.reset();
+      resetAutocompleteText({ autocompleteText });
 
       // ghost
       syncGhostText({ textarea, ghostText });
@@ -69,24 +63,22 @@ window.addEventListener("load", () => {
         addAutocompleteTextToTextArea({
           textarea,
           autocompleteText,
-          controller,
         });
         //make this fetch controller later  controller.abort();
-        controller.abort();
-        controller = new AbortController();
+        fetchController.controller.abort();
+        fetchController.controller = new AbortController();
       }
       if (e.keyCode === 13) {
         // autocomplete
-        controller.abort();
-        controller = new AbortController();
-        resetWiseTextarea({ autocompleteText });
+        fetchController.controller.abort();
+        fetchController.controller = new AbortController();
+        resetAutocompleteText({ autocompleteText });
       }
     });
     form.addEventListener("submit", () => {
       // autocomplete
-      lastInput = Date.now();
-      resetWiseTextarea({ autocompleteText });
-      fetchState = fetchStates.idle;
+      fetchController.reset();
+      resetAutocompleteText({ autocompleteText });
       // ghost (none)
     });
     setInterval(async () => {
@@ -94,18 +86,18 @@ window.addEventListener("load", () => {
         // it has been 1 second since last input
         Date.now() - lastInput >= 200 &&
         // and fetch state is idle
-        fetchState === fetchStates.idle &&
+        fetchController.fetchState === fetchStates.idle &&
         // there is more than 10 characters in the textarea
         textarea.value.length > 10
       ) {
         // autocomplete
-        controller.abort();
-        controller = new AbortController();
-        fetchState = fetchStates.fetching;
+        fetchController.controller.abort();
+        fetchController.controller = new AbortController();
+        fetchController.fetchState = fetchStates.fetching;
 
         const { body, aborted, error } = await fetchAutocomplete({
           textarea,
-          controller,
+          controller: fetchController.controller,
         });
         console.log("body", body, "aborted", aborted, "error", error);
         if (aborted) {
@@ -117,13 +109,13 @@ window.addEventListener("load", () => {
           return;
         }
 
-        if (fetchState === fetchStates.idle) {
+        if (fetchController.fetchState === fetchStates.idle) {
           // do nothing with the response
           return;
         }
         processStream({ body, autocompleteText, textarea });
 
-        fetchState = fetchStates.fetched;
+        fetchController.fetchState = fetchStates.fetched;
         textarea.classList.add("expanded-textarea");
         wiseTextarea.classList.add("expanded-textarea");
       }
@@ -149,7 +141,7 @@ async function fetchAutocomplete({ textarea, controller }) {
       return response;
     })
     .catch((error) => {
-      console.log("HERE")
+      console.log("HERE");
       if (error.name === `AbortError`) {
         return { aborted: true };
       }
