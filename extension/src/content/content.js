@@ -31,11 +31,6 @@ window.addEventListener("load", () => {
   let fetchState = fetchStates.idle;
   let controller = new AbortController();
 
-  const debuggingLogger = (text) => {
-    text && console.log(text);
-    console.log(fetchState);
-  };
-
   // Check if a textarea element was found and set listeners
   if (textarea && parent && form) {
     setListeners({ textarea, wiseTextarea, parent, form });
@@ -61,19 +56,17 @@ window.addEventListener("load", () => {
         e.preventDefault();
         textarea.value += autocompleteText.innerText;
         autocompleteText.innerText = "";
+        controller.abort();
         // This input should reset the wiseTextarea, deleting the span in the process
         textarea.dispatchEvent(new Event("input", { bubbles: true }));
         textarea.focus();
       }
       if (e.keyCode === 13) {
         controller.abort();
-        console.log("enter pushed");
         autocompleteText.innerText = "";
       }
     });
     form.addEventListener("submit", () => {
-      console.log("SUBMIT");
-
       lastInput = Date.now();
 
       // TODO it appears that some ghostText may remain
@@ -87,36 +80,72 @@ window.addEventListener("load", () => {
         // and fetch state is idle
         fetchState === fetchStates.idle &&
         // there is more than 10 characters in the textarea
-        wiseTextarea.innerHTML.length > 10
+        textarea.value.length > 10
       ) {
         controller.abort();
         controller = new AbortController();
 
         fetchState = fetchStates.fetching;
-        debuggingLogger("before fetchAutocomplete event");
-        const fetchedAutocompleteText = await fetchAutocomplete({
+
+        const { body, aborted, error } = await fetchAutocomplete({
           textarea,
           controller,
         });
-        debuggingLogger("after fetchAutocomplete event");
+        console.log("body", body, "aborted", aborted, "error", error);
+        if (aborted) {
+          console.log("aborted!!");
+          return;
+        } else if (error) {
+          console.log("error!!");
+          console.error(error);
+          return;
+        }
+        const reader = body.getReader();
+        const processStream = async () => {
+          while (true) {
+            const { value, done } = await reader.read();
+            if (done) {
+              break;
+            }
+
+            const chunkString = new TextDecoder("utf-8").decode(value);
+
+            const dataChunks = chunkString.split("data: ");
+            const nonEmptyChunks = dataChunks.filter(
+              (chunk) => chunk.trim() !== ""
+            );
+            const jsonStrings = nonEmptyChunks.map((chunk) => {
+              const trimmedChunk = chunk.trim();
+              if (trimmedChunk === "[DONE]") {
+                return null; // Skip further processing for [DONE] case
+              }
+              return trimmedChunk.replace(/^data:\s*/, "");
+            });
+            const validJsonStrings = jsonStrings.filter(
+              (jsonString) => jsonString !== null
+            );
+
+            const content = validJsonStrings
+              .map(
+                (jsonObject) => JSON.parse(jsonObject).choices[0].delta.content
+              )
+              .join("");
+
+            autocompleteText.textContent +=
+              !autocompleteText.textContent.length &&
+              textarea.value.slice(-1) !== " "
+                ? " " + content
+                : content;
+          }
+        };
         if (fetchState === fetchStates.idle) {
           // do nothing with the response
           return;
         }
-        if (fetchedAutocompleteText) {
-          fetchState = fetchStates.fetched;
-          let newAutocompleteText = fetchedAutocompleteText;
-
-          if (textarea.textContent.slice(-1) !== " ") {
-            newAutocompleteText = " " + newAutocompleteText;
-          }
-          autocompleteText.textContent = newAutocompleteText;
-
-          textarea.classList.add("expanded-textarea");
-          wiseTextarea.classList.add("expanded-textarea");
-        } else {
-          fetchState = fetchStates.error;
-        }
+        processStream();
+        fetchState = fetchStates.fetched;
+        textarea.classList.add("expanded-textarea");
+        wiseTextarea.classList.add("expanded-textarea");
       }
     }, 200);
   }
@@ -148,17 +177,14 @@ async function fetchAutocomplete({ textarea, controller }) {
     body: JSON.stringify({ content }),
     signal: controller.signal,
   })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data);
-      return data.autocomplete;
+    .then((response) => {
+      return response;
     })
     .catch((error) => {
       if (error.name === `AbortError`) {
-        console.log(`--fetch aborted--`);
-        return;
+        return { aborted: true };
       }
-      console.error("error", error);
+      return { error: error.message };
     });
 }
 
@@ -174,7 +200,6 @@ async function fetchAutocomplete({ textarea, controller }) {
 
 // PROMPTS
 chrome.runtime.onMessage.addListener(function(request) {
-  console.log("request", request);
   switch (request.action) {
     case "changeText":
       changeText(request.text);
