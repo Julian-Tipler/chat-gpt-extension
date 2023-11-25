@@ -1,4 +1,5 @@
 console.log("content.js 🚀");
+import { syncGhostText } from "./ghostText/syncGhostText";
 
 window.addEventListener("load", () => {
   // existing elements
@@ -124,10 +125,6 @@ window.addEventListener("load", () => {
 
 // Resets any spans and then updates the innerText to match the wiseTextarea text
 // TODO maybe I should include space/paragraph logic here?
-const syncGhostText = ({ textarea, ghostText }) => {
-  // wiseTextarea.innerHTML = "";
-  ghostText.innerText = textarea.value;
-};
 
 const resetWiseTextarea = ({ autocompleteText, ghostText }) => {
   ghostText.innerText = "";
