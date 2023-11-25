@@ -4,6 +4,7 @@ import { processStream } from "./autocomplete/helpers/processStream";
 import { addAutocompleteTextToTextArea } from "./autocomplete/addAutocompleteTextToTextArea";
 import FetchController from "./autocomplete/FetchController";
 import { fetchStates } from "./autocomplete/constants/fetchStates";
+import { changeText } from "./prompts/changeText";
 
 console.log("content.js 🚀");
 const apiUrl = import.meta.env.VITE_API_URL + "/functions/v1/autocomplete";
@@ -164,17 +165,3 @@ chrome.runtime.onMessage.addListener(function(request) {
       break;
   }
 });
-
-function changeText(text) {
-  const textarea = document.querySelector("textarea");
-  if (textarea) {
-    const currentText = textarea.value.trim();
-    if (currentText !== "") {
-      textarea.value += "\n\n" + text;
-    } else {
-      textarea.value += text;
-    }
-    textarea.dispatchEvent(new Event("input", { bubbles: true }));
-    textarea.focus();
-  }
-}
