@@ -25,7 +25,6 @@ window.addEventListener("load", () => {
   const fetchStates = {
     idle: "idle",
     fetching: "fetching",
-    streaming: "streaming",
     fetched: "fetched",
     error: "error",
   };
