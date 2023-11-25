@@ -160,7 +160,7 @@ async function fetchAutocomplete({ textarea, controller }) {
 // PROMPTS
 chrome.runtime.onMessage.addListener(function(request) {
   switch (request.action) {
-    case "changeText":
+    case "addPrompt":
       addPrompt(request.text);
       break;
   }
