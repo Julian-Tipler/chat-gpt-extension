@@ -1,5 +1,17 @@
 console.log("content.js 🚀");
 import { syncGhostText } from "./ghostText/syncGhostText";
+import { resetWiseTextarea } from "./autocomplete/resetWiseTextarea";
+import { processStream } from "./autocomplete/helpers/processStream";
+import { addAutocompleteTextToTextArea } from "./autocomplete/addAutocompleteTextToTextArea";
+
+const fetchStates = {
+  idle: "idle",
+  fetching: "fetching",
+  fetched: "fetched",
+  error: "error",
+};
+const apiUrl = import.meta.env.VITE_API_URL + "/functions/v1/autocomplete";
+const accessToken = import.meta.env.VITE_WISE_API_TOKEN;
 
 window.addEventListener("load", () => {
   // existing elements
@@ -23,12 +35,7 @@ window.addEventListener("load", () => {
   // textarea and wiseTextarea are now siblings
 
   let lastInput = Date.now();
-  const fetchStates = {
-    idle: "idle",
-    fetching: "fetching",
-    fetched: "fetched",
-    error: "error",
-  };
+
   let fetchState = fetchStates.idle;
   let controller = new AbortController();
 
@@ -42,37 +49,45 @@ window.addEventListener("load", () => {
   function setListeners({ textarea, wiseTextarea, form }) {
     // Resets the lastInput, wiseTextarea, and fetchState
     textarea.addEventListener("input", () => {
+      // autocomplete
+      controller.abort();
+      controller = new AbortController();
       lastInput = Date.now();
-
-      // This deletes the existing autocompleteText
-      syncGhostText({ textarea, ghostText });
-      autocompleteText.innerText = "";
       fetchState = fetchStates.idle;
+      autocompleteText.innerText = "";
+
+      // ghost
+      syncGhostText({ textarea, ghostText });
     });
     textarea.addEventListener("scroll", function() {
+      // both
       wiseTextarea.style.transform = "translateY(" + -this.scrollTop + "px)";
     });
     document.addEventListener("keydown", (e) => {
       if (e.key === "Tab") {
         e.preventDefault();
-        textarea.value += autocompleteText.innerText;
-        autocompleteText.innerText = "";
+        addAutocompleteTextToTextArea({
+          textarea,
+          autocompleteText,
+          controller,
+        });
+        //make this fetch controller later  controller.abort();
         controller.abort();
-        // This input should reset the wiseTextarea, deleting the span in the process
-        textarea.dispatchEvent(new Event("input", { bubbles: true }));
-        textarea.focus();
+        controller = new AbortController();
       }
       if (e.keyCode === 13) {
+        // autocomplete
         controller.abort();
-        autocompleteText.innerText = "";
+        controller = new AbortController();
+        resetWiseTextarea({ autocompleteText });
       }
     });
     form.addEventListener("submit", () => {
+      // autocomplete
       lastInput = Date.now();
-
-      // TODO it appears that some ghostText may remain
-      resetWiseTextarea({ autocompleteText, ghostText });
+      resetWiseTextarea({ autocompleteText });
       fetchState = fetchStates.idle;
+      // ghost (none)
     });
     setInterval(async () => {
       if (
@@ -83,9 +98,9 @@ window.addEventListener("load", () => {
         // there is more than 10 characters in the textarea
         textarea.value.length > 10
       ) {
+        // autocomplete
         controller.abort();
         controller = new AbortController();
-
         fetchState = fetchStates.fetching;
 
         const { body, aborted, error } = await fetchAutocomplete({
@@ -101,49 +116,13 @@ window.addEventListener("load", () => {
           console.error(error);
           return;
         }
-        const reader = body.getReader();
-        const processStream = async () => {
-          while (true) {
-            const { value, done } = await reader.read();
-            if (done) {
-              break;
-            }
 
-            const chunkString = new TextDecoder("utf-8").decode(value);
-
-            const dataChunks = chunkString.split("data: ");
-            const nonEmptyChunks = dataChunks.filter(
-              (chunk) => chunk.trim() !== ""
-            );
-            const jsonStrings = nonEmptyChunks.map((chunk) => {
-              const trimmedChunk = chunk.trim();
-              if (trimmedChunk === "[DONE]") {
-                return null; // Skip further processing for [DONE] case
-              }
-              return trimmedChunk.replace(/^data:\s*/, "");
-            });
-            const validJsonStrings = jsonStrings.filter(
-              (jsonString) => jsonString !== null
-            );
-
-            const content = validJsonStrings
-              .map(
-                (jsonObject) => JSON.parse(jsonObject).choices[0].delta.content
-              )
-              .join("");
-
-            autocompleteText.textContent +=
-              !autocompleteText.textContent.length &&
-              textarea.value.slice(-1) !== " "
-                ? " " + content
-                : content;
-          }
-        };
         if (fetchState === fetchStates.idle) {
           // do nothing with the response
           return;
         }
-        processStream();
+        processStream({ body, autocompleteText, textarea });
+
         fetchState = fetchStates.fetched;
         textarea.classList.add("expanded-textarea");
         wiseTextarea.classList.add("expanded-textarea");
@@ -155,15 +134,7 @@ window.addEventListener("load", () => {
 // Resets any spans and then updates the innerText to match the wiseTextarea text
 // TODO maybe I should include space/paragraph logic here?
 
-const resetWiseTextarea = ({ autocompleteText, ghostText }) => {
-  ghostText.innerText = "";
-  autocompleteText.innerText = "";
-};
-
 async function fetchAutocomplete({ textarea, controller }) {
-  const apiUrl = import.meta.env.VITE_API_URL + "/functions/v1/autocomplete";
-
-  const accessToken = import.meta.env.VITE_WISE_API_TOKEN;
   const content = textarea.textContent;
   return fetch(apiUrl, {
     method: "POST",
@@ -178,6 +149,7 @@ async function fetchAutocomplete({ textarea, controller }) {
       return response;
     })
     .catch((error) => {
+      console.log("HERE")
       if (error.name === `AbortError`) {
         return { aborted: true };
       }
