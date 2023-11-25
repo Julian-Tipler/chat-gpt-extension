@@ -1,4 +1,3 @@
-console.log("content.js 🚀");
 import { syncGhostText } from "./ghostText/syncGhostText";
 import { resetAutocompleteText } from "./autocomplete/resetAutocompleteText";
 import { processStream } from "./autocomplete/helpers/processStream";
@@ -6,6 +5,7 @@ import { addAutocompleteTextToTextArea } from "./autocomplete/addAutocompleteTex
 import FetchController from "./autocomplete/FetchController";
 import { fetchStates } from "./autocomplete/constants/fetchStates";
 
+console.log("content.js 🚀");
 const apiUrl = import.meta.env.VITE_API_URL + "/functions/v1/autocomplete";
 const accessToken = import.meta.env.VITE_WISE_API_TOKEN;
 
@@ -29,8 +29,6 @@ window.addEventListener("load", () => {
   autocompleteText.id = "autocomplete-text";
   wiseTextarea.appendChild(autocompleteText);
   // textarea and wiseTextarea are now siblings
-
-  let lastInput = Date.now();
 
   const fetchController = new FetchController();
 
@@ -84,7 +82,7 @@ window.addEventListener("load", () => {
     setInterval(async () => {
       if (
         // it has been 1 second since last input
-        Date.now() - lastInput >= 200 &&
+        Date.now() - fetchController.lastInput >= 200 &&
         // and fetch state is idle
         fetchController.fetchState === fetchStates.idle &&
         // there is more than 10 characters in the textarea
@@ -99,7 +97,7 @@ window.addEventListener("load", () => {
           textarea,
           controller: fetchController.controller,
         });
-        console.log("body", body, "aborted", aborted, "error", error);
+
         if (aborted) {
           console.log("aborted!!");
           return;
@@ -141,7 +139,6 @@ async function fetchAutocomplete({ textarea, controller }) {
       return response;
     })
     .catch((error) => {
-      console.log("HERE");
       if (error.name === `AbortError`) {
         return { aborted: true };
       }
