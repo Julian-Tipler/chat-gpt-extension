@@ -87,17 +87,24 @@ window.addEventListener("load", () => {
 
         fetchState = fetchStates.fetching;
 
-        const response = await fetchAutocomplete({
+        const { body, aborted, error } = await fetchAutocomplete({
           textarea,
           controller,
         });
-
-        const reader = response.body.getReader();
+        console.log("body", body, "aborted", aborted, "error", error);
+        if (aborted) {
+          console.log("aborted!!");
+          return;
+        } else if (error) {
+          console.log("error!!");
+          console.error(error);
+          return;
+        }
+        const reader = body.getReader();
         const processStream = async () => {
           while (true) {
             const { value, done } = await reader.read();
             if (done) {
-              console.log("Stream done");
               break;
             }
 
@@ -175,9 +182,9 @@ async function fetchAutocomplete({ textarea, controller }) {
     })
     .catch((error) => {
       if (error.name === `AbortError`) {
-        return;
+        return { aborted: true };
       }
-      console.error("error", error);
+      return { error: error.message };
     });
 }
 
