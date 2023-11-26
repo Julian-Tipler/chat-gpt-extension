@@ -5,6 +5,7 @@ import { addAutocompleteTextToTextArea } from "./autocomplete/addAutocompleteTex
 import FetchController from "./autocomplete/FetchController";
 import { fetchStates } from "./autocomplete/constants/fetchStates";
 import { addPrompt } from "./prompts/addPrompt";
+import { expandTextareas } from "./ghostText/expandTextareas";
 
 console.log("content.js 🚀");
 const apiUrl = import.meta.env.VITE_API_URL + "/functions/v1/autocomplete";
@@ -42,19 +43,15 @@ window.addEventListener("load", () => {
 
   function setListeners({ textarea, wiseTextarea, form }) {
     // Resets the lastInput, wiseTextarea, and fetchState
-    textarea.addEventListener("input", () => {
-      // autocomplete
-      // fetchController.controller.abort();
-      // fetchController.controller = new AbortController();
-      fetchController.reset();
-      resetAutocompleteText({ autocompleteText });
-
-      // ghost
-      syncGhostText({ textarea, ghostText });
-    });
     textarea.addEventListener("scroll", function() {
       // both
       wiseTextarea.style.transform = "translateY(" + -this.scrollTop + "px)";
+    });
+    textarea.addEventListener("input", () => {
+      fetchController.reset();
+      resetAutocompleteText({ autocompleteText });
+
+      syncGhostText({ textarea, ghostText });
     });
     document.addEventListener("keydown", (e) => {
       if (e.key === "Tab") {
@@ -64,13 +61,13 @@ window.addEventListener("load", () => {
           autocompleteText,
         });
         //make this fetch controller later  controller.abort();
-        fetchController.controller.abort();
-        fetchController.controller = new AbortController();
+        fetchController.reset();
       }
       if (e.keyCode === 13) {
         // autocomplete
-        fetchController.controller.abort();
-        fetchController.controller = new AbortController();
+        // fetchController.controller.abort();
+        // fetchController.controller = new AbortController();
+        fetchController.reset();
         resetAutocompleteText({ autocompleteText });
       }
     });
@@ -81,43 +78,12 @@ window.addEventListener("load", () => {
       // ghost (none)
     });
     setInterval(async () => {
-      if (
-        // it has been 1 second since last input
-        Date.now() - fetchController.lastInput >= 200 &&
-        // and fetch state is idle
-        fetchController.fetchState === fetchStates.idle &&
-        // there is more than 10 characters in the textarea
-        textarea.value.length > 10
-      ) {
-        // autocomplete
-        fetchController.controller.abort();
-        fetchController.controller = new AbortController();
-        fetchController.fetchState = fetchStates.fetching;
-
-        const { body, aborted, error } = await fetchAutocomplete({
-          textarea,
-          controller: fetchController.controller,
-        });
-
-        if (aborted) {
-          console.log("aborted!!");
-          return;
-        } else if (error) {
-          console.log("error!!");
-          console.error(error);
-          return;
-        }
-
-        if (fetchController.fetchState === fetchStates.idle) {
-          // do nothing with the response
-          return;
-        }
-        processStream({ body, autocompleteText, textarea });
-
-        fetchController.fetchState = fetchStates.fetched;
-        textarea.classList.add("expanded-textarea");
-        wiseTextarea.classList.add("expanded-textarea");
-      }
+      await maybeFetchAutocomplete({
+        textarea,
+        fetchController,
+        autocompleteText,
+        wiseTextarea,
+      });
     }, 200);
   }
 });
@@ -125,7 +91,46 @@ window.addEventListener("load", () => {
 // Resets any spans and then updates the innerText to match the wiseTextarea text
 // TODO maybe I should include space/paragraph logic here?
 
-async function fetchAutocomplete({ textarea, controller }) {
+async function maybeFetchAutocomplete({
+  textarea,
+  fetchController,
+  autocompleteText,
+  wiseTextarea,
+}) {
+  // console.log(
+  //   Date.now() - fetchController.lastInput >= 200,
+  //   fetchController.fetchState,
+  //   textarea.value.length > 10
+  // );
+  if (
+    // it has been 1 second since last input
+    Date.now() - fetchController.lastInput >= 200 &&
+    // and fetch state is idle
+    fetchController.fetchState === fetchStates.idle &&
+    // there is more than 10 characters in the textarea
+    textarea.value.length > 10
+  ) {
+    fetchController.startFetch();
+    const { body, aborted, error } = await fetchAutocomplete({
+      textarea,
+      fetchController,
+    });
+
+    if (aborted) {
+      return;
+    } else if (error) {
+      fetchController.fetchError();
+      return;
+    }
+
+    processStream({ body, autocompleteText, textarea, fetchController });
+
+    fetchController.successfulFetch();
+    expandTextareas({ textarea, wiseTextarea });
+  }
+}
+
+async function fetchAutocomplete({ textarea, fetchController }) {
   const content = textarea.textContent;
   return fetch(apiUrl, {
     method: "POST",
@@ -134,15 +139,17 @@ async function fetchAutocomplete({ textarea, controller }) {
       Authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify({ content }),
-    signal: controller.signal,
+    signal: fetchController.controller.signal,
   })
     .then((response) => {
       return response;
     })
     .catch((error) => {
       if (error.name === `AbortError`) {
+        console.error("FETCH AbortError", error);
         return { aborted: true };
       }
+      console.error("FETCH regular error", error);
       return { error: error.message };
     });
 }
