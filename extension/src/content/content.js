@@ -146,7 +146,6 @@ async function fetchAutocomplete({ textarea, fetchController }) {
     })
     .catch((error) => {
       if (error.name === `AbortError`) {
-        console.error("FETCH AbortError", error);
         return { aborted: true };
       }
       console.error("FETCH regular error", error);
