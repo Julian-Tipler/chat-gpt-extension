@@ -5,11 +5,12 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   build: {
+    sourcemap: true,
     rollupOptions: {
       input: {
-        main: "index.html", // The entry point for your React app
-        content: "src/content/content.js", // The entry point for your content script
-        background: "src/background/background.js", // The entry point for your background script
+        main: "index.html", // The entry point for the React app
+        content: "src/content/content.js", // The entry point for the content script
+        background: "src/background/background.js", // The entry point for the background script
       },
       output: {
         entryFileNames: (chunkInfo) => {
@@ -23,7 +24,13 @@ export default defineConfig({
           return "assets/[name]-[hash].js";
         },
         chunkFileNames: "assets/[name]-[hash].js",
-        assetFileNames: "assets/[name]-[hash].[ext]",
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name === "content.css") {
+            return "content.css";
+          }
+          // For other assets, retain the default behavior with hashing
+          return "assets/[name]-[hash].[ext]";
+        },
       },
     },
   },
