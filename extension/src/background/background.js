@@ -1,4 +1,4 @@
-console.log("background.js 🚀🚀🚀");
+console.log("background.js 🚀🚀");
 
 // chrome.runtime.onInstalled.addListener(({ reason }) => {
 //   console.log("reason", reason);

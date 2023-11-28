@@ -63,6 +63,7 @@ async function protectedLoader() {
 const isAuthenticated = async (): Promise<boolean> => {
   return new Promise((resolve) => {
     chrome.storage.local.get(["wiseSessionToken"], function(result) {
+      console.log("popup attempting to get wiseSessionToken", result);
       if (result.wiseSessionToken) {
         resolve(true);
       } else {
