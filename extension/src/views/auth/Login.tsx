@@ -1,5 +1,4 @@
 import { Button, Link, Text } from "@chakra-ui/react";
-import supabase from "../../supabase/supabaseClient";
 
 export const Login = () => {
   const webAuthUrl =

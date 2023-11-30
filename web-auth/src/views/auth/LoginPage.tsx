@@ -16,6 +16,7 @@ import {
   useLocation,
   useNavigation,
 } from "react-router-dom";
+import supabase from "../../supabase/supabaseClient";
 
 export const LoginPage = () => {
   const location = useLocation();
@@ -74,4 +75,11 @@ export const LoginPage = () => {
       </VStack>
     </Grid>
   );
+};
+
+const loginWithGoogle = async () => {
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+  });
+  console.log(data, error);
 };
