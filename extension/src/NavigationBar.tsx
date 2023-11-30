@@ -13,7 +13,6 @@ const items = [
 
 export const NavigationBar = () => {
   const { pathname } = useLocation();
-  console.log(location);
   return (
     <Box paddingTop={"1rem"} backgroundColor={"brand.cardBackground"}>
       <Title />
