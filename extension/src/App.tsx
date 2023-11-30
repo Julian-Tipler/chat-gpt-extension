@@ -9,18 +9,14 @@ import { PromptsPage } from "./views/prompts/PromptsPage";
 import { SettingsPage } from "./views/settings/SettingsPage";
 import { MainLayout } from "./MainLayout";
 import { Flex } from "@chakra-ui/layout";
+import supabase from "./supabase/supabaseClient";
 const App = () => {
   const router = createHashRouter([
     {
       id: "root",
       path: "/",
       element: (
-        <Flex
-          className="app"
-          //Matches height of body
-          height={"100%"}
-          flexDirection={"column"}
-        >
+        <Flex className="app" height={"100%"} flexDirection={"column"}>
           <Outlet />
         </Flex>
       ),
@@ -31,7 +27,11 @@ const App = () => {
           loader: protectedLoader,
           children: [
             { index: true, element: <PromptsPage /> },
-            { path: "settings", element: <SettingsPage /> },
+            {
+              path: "settings",
+              element: <SettingsPage />,
+              loader: settingsLoader,
+            },
           ],
         },
         {
@@ -49,21 +49,15 @@ const App = () => {
 };
 
 async function protectedLoader() {
-  // If the user is not logged in and tries to access `/protected`, we redirect
-  // them to `/login` with a `from` parameter that allows login to redirect back
-  // to this page upon successful authentication
   const auth = await isAuthenticated();
-  // something like this: const session = supabase.auth.session();
   if (!auth) {
     return redirect("/login");
   }
   return { auth };
 }
-
 const isAuthenticated = async (): Promise<boolean> => {
   return new Promise((resolve) => {
     chrome.storage.local.get(["wiseSessionToken"], function(result) {
-      console.log("popup attempting to get wiseSessionToken", result);
       if (result.wiseSessionToken) {
         resolve(true);
       } else {
@@ -72,5 +66,12 @@ const isAuthenticated = async (): Promise<boolean> => {
     });
   });
 };
+
+async function settingsLoader() {
+  const jwt: any = await chrome.storage.local.get(["wiseSessionToken"]);
+  console.log("jwt", jwt);
+  const user = await supabase.auth.getUser(jwt?.wiseSessionToken?.access_token);
+  console.log("user", user);
+}
 
 export default App;
