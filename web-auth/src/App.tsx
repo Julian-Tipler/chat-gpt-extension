@@ -4,7 +4,7 @@ import {
   redirect,
   RouterProvider,
 } from "react-router-dom";
-import { SuccessPage } from "./views/auth/SuccessPage";
+import { SuccessPage } from "./views/SuccessPage";
 import { LoginPage } from "./views/auth/LoginPage";
 import { SignupPage } from "./views/auth/SignupPage";
 import supabase from "./supabase/supabaseClient";
@@ -77,6 +77,7 @@ async function protectedLoader({ request }: LoaderFunctionArgs) {
   // them to `/login` with a `from` parameter that allows login to redirect back
   // to this page upon successful authentication
   const auth = await supabase.auth.getSession();
+  console.log("auth", auth);
   // something like this: const session = supabase.auth.session();
   if (!auth?.data?.session) {
     const params = new URLSearchParams();

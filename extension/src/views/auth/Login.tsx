@@ -1,4 +1,5 @@
 import { Button, Link, Text } from "@chakra-ui/react";
+import supabase from "../../supabase/supabaseClient";
 
 export const Login = () => {
   const webAuthUrl =
@@ -10,6 +11,9 @@ export const Login = () => {
         <Button colorScheme="teal" size="md">
           Login Here
         </Button>
+        {/* <Button onClick={chromeLogin} colorScheme="teal" size="md">
+          Experimental google auth
+        </Button> */}
       </Link>
     </>
   );
@@ -25,11 +29,11 @@ export const Login = () => {
 //   const scopes = manifest?.oauth2?.scopes || [];
 //   url.searchParams.set("client_id", client_id);
 //   url.searchParams.set("response_type", "id_token");
-//   url.searchParams.set("access_type", "offline");
 //   url.searchParams.set(
 //     "redirect_uri",
 //     `https://${chrome.runtime.id}.chromiumapp.org`
 //   );
+//   url.searchParams.set("access_type", "offline");
 //   url.searchParams.set("scope", scopes.join(" "));
 //   console.log("url", url.href);
 //   chrome.identity.launchWebAuthFlow(
