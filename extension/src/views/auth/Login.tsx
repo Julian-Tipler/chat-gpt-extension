@@ -1,11 +1,15 @@
-import { Button, Link, Text } from "@chakra-ui/react";
-import supabase from "../../supabase/supabaseClient";
+import { Button, Flex, Link, Text } from "@chakra-ui/react";
 
 export const Login = () => {
   const webAuthUrl =
     import.meta.env.VITE_WEB_AUTH_URL || "http://localhost:5173";
   return (
-    <>
+    <Flex
+      height={"100vh"}
+      flexDir={"column"}
+      alignItems={"center"}
+      justifyContent={"center"}
+    >
       <Text>Login here: No credit card required!</Text>
       <Link isExternal href={webAuthUrl}>
         <Button colorScheme="teal" size="md">
@@ -15,7 +19,7 @@ export const Login = () => {
           Experimental google auth
         </Button> */}
       </Link>
-    </>
+    </Flex>
   );
 };
 

@@ -19,6 +19,7 @@ const loginWithGoogle = async () => {
         access_type: "offline",
         prompt: "consent",
       },
+      redirectTo: false || "http://localhost:5173",
     },
   });
 };

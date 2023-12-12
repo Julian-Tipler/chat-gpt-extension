@@ -10,6 +10,7 @@ import { SettingsPage } from "./views/settings/SettingsPage";
 import { MainLayout } from "./MainLayout";
 import { Flex } from "@chakra-ui/layout";
 import supabase from "./supabase/supabaseClient";
+import { Session } from "@supabase/supabase-js";
 const App = () => {
   const router = createHashRouter([
     {
@@ -49,17 +50,21 @@ const App = () => {
 };
 
 async function protectedLoader() {
-  const auth = await isAuthenticated();
-  if (!auth) {
+  const wiseSessionToken = await isAuthenticated();
+  if (!wiseSessionToken) {
     return redirect("/login");
   }
-  return { auth };
+  const auth = await supabase.auth.getUser("123");
+  if (!auth.data?.user) {
+    return redirect("/login");
+  }
+  return { wiseSessionToken };
 }
-const isAuthenticated = async (): Promise<boolean> => {
+const isAuthenticated = async (): Promise<Session | false> => {
   return new Promise((resolve) => {
     chrome.storage.local.get(["wiseSessionToken"], function(result) {
       if (result.wiseSessionToken) {
-        resolve(true);
+        resolve(result.wiseSessionToken);
       } else {
         resolve(false);
       }
@@ -68,9 +73,10 @@ const isAuthenticated = async (): Promise<boolean> => {
 };
 
 async function settingsLoader() {
-  const jwt: any = await chrome.storage.local.get(["wiseSessionToken"]);
-  console.log("jwt", jwt);
-  const user = await supabase.auth.getUser(jwt?.wiseSessionToken?.access_token);
+  const { wiseSessionToken } = await chrome.storage.local.get([
+    "wiseSessionToken",
+  ]);
+  const user = await supabase.auth.getUser(wiseSessionToken?.access_token);
   console.log("user", user);
 }
 
