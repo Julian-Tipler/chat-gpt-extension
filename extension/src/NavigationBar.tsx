@@ -1,4 +1,5 @@
 import { Box, Button, Flex } from "@chakra-ui/react";
+import "./NavigationBar.css";
 import { Title } from "./components/Title";
 const items = [
   {

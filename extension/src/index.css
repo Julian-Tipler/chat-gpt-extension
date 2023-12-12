@@ -12,6 +12,18 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+
+  /* brand colors */
+
+  --color-primary: #57CC99;
+  --color-primary-hover: #C7F9CC;
+  --color-secondary: #38A3A5;
+  --color-secondary: #d3ff64;
+  --color-secondary-hover: #C7F9F9;
+  --color-background:  red;
+  --text-primary: #fff;
+  --text-secondary: #ccc;
+  --text-tertiary: #999;
 }
 
 a {

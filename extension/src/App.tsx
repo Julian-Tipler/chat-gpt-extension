@@ -8,18 +8,19 @@ import { Login } from "./views/auth/Login";
 import { PromptsPage } from "./views/prompts/PromptsPage";
 import { SettingsPage } from "./views/settings/SettingsPage";
 import { MainLayout } from "./MainLayout";
-import { Flex } from "@chakra-ui/layout";
 import supabase from "./supabase/supabaseClient";
 import { Session } from "@supabase/supabase-js";
+import "./App.css";
+
 const App = () => {
   const router = createHashRouter([
     {
       id: "root",
       path: "/",
       element: (
-        <Flex className="app" height={"100%"} flexDirection={"column"}>
+        <div className="app">
           <Outlet />
-        </Flex>
+        </div>
       ),
       children: [
         {
@@ -54,7 +55,7 @@ async function protectedLoader() {
   if (!wiseSessionToken) {
     return redirect("/login");
   }
-  const auth = await supabase.auth.getUser("123");
+  const auth = await supabase.auth.getUser(wiseSessionToken.access_token);
   if (!auth.data?.user) {
     return redirect("/login");
   }

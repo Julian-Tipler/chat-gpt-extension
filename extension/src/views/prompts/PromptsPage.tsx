@@ -11,7 +11,7 @@ export type Prompt = {
 export const PromptsPage = () => {
   return (
     <Flex
-      className="main-container"
+      className="prompt-container"
       flexDir={"column"}
       justifyContent={"center"}
       flex={1}
