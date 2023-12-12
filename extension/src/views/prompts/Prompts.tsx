@@ -1,39 +1,25 @@
 import React from "react";
 import { Prompt } from "./PromptsPage";
 import { usePrompts } from "../../contexts/PromptsContext";
-import { Flex } from "@chakra-ui/layout";
 import { colors } from "../../theme";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { NewPromptModal } from "./NewPromptModal";
+import "./Prompts.css";
 
 export const Prompts = () => {
   const { prompts } = usePrompts();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Flex
-      className="item-and-button-container"
-      bgColor={"brand.cardBackground"}
-      borderRadius={"0.25rem"}
-      flexDirection={"column"}
-      flex={1}
-      overflow={"hidden"}
-    >
-      <Flex
-        className="item-container"
-        flexDir={"column"}
-        gap={"0.25rem"}
-        flex={1}
-        padding={"0.25rem"}
-        overflow={"scroll"}
-      >
+    <div className="item-and-button-container">
+      <div className="item-container">
         {prompts.map((prompt, index) => (
           <Prompt key={index} prompt={prompt} />
         ))}
-      </Flex>
+      </div>
       <NewPromptModal isOpen={isOpen} onClose={onClose} />
       <PlusButton onOpen={onOpen} />
-    </Flex>
+    </div>
   );
 };
 
@@ -52,16 +38,9 @@ const Prompt = ({ prompt }: { prompt: Prompt }) => {
   };
 
   return (
-    <Flex
-      flexDir={"row"}
-      alignItems={"center"}
-      justifyContent={"space-between"}
-      padding={"0.5rem"}
-      borderRadius={"0.5rem"}
-      bgColor={"brand.background"}
-    >
+    <div className="item">
       <div className={"prompt-name"}>{prompt.name}</div>
-      <Flex gap={"0.25rem"}>
+      <div className={"item-buttons"}>
         <button
           id={`prompt-${prompt.id}`}
           className={"clickable-button copy-button"}
@@ -76,8 +55,8 @@ const Prompt = ({ prompt }: { prompt: Prompt }) => {
         >
           <i className="fas fa-trash" />
         </button>
-      </Flex>
-    </Flex>
+      </div>
+    </div>
   );
 };
 

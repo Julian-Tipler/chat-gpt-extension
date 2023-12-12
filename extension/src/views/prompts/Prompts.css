@@ -1,0 +1,32 @@
+.item-and-button-container {
+  display: flex;
+  background-color: var(--color-cardBackground);
+  border-radius: 0.25rem;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+.item-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+  padding: 0.25rem;
+  overflow: scroll;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background-color: var(--color-background);
+}
+
+.item-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 0.25rem;
+}

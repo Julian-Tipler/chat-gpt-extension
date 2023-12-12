@@ -15,12 +15,13 @@
 
   /* brand colors */
 
-  --color-primary: #57CC99;
-  --color-primary-hover: #C7F9CC;
-  --color-secondary: #38A3A5;
+  --color-primary: #57cc99;
+  --color-primary-hover: #c7f9cc;
+  --color-secondary: #38a3a5;
   --color-secondary: #d3ff64;
-  --color-secondary-hover: #C7F9F9;
-  --color-background:  red;
+  --color-secondary-hover: #c7f9f9;
+  --color-background: #343541;
+  --color-cardBackground: #172d3a;
   --text-primary: #fff;
   --text-secondary: #ccc;
   --text-tertiary: #999;

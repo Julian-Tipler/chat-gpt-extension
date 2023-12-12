@@ -1,6 +1,6 @@
 //
 import { Prompts } from "./Prompts";
-import { Flex } from "@chakra-ui/layout";
+import "./PromptsPage.css";
 
 export type Prompt = {
   id: string;
@@ -10,17 +10,8 @@ export type Prompt = {
 
 export const PromptsPage = () => {
   return (
-    <Flex
-      className="prompt-container"
-      flexDir={"column"}
-      justifyContent={"center"}
-      flex={1}
-      padding={"20px"}
-      backgroundColor={"brand.background"}
-      borderRadius={"0.5rem"}
-      overflow={"hidden"}
-    >
+    <div className="prompt-container">
       <Prompts />
-    </Flex>
+    </div>
   );
 };
