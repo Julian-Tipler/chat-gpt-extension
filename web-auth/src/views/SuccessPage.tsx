@@ -19,15 +19,11 @@ export const SuccessPage = () => {
         console.error("Error fetching data:", error.message);
       }
     };
-
     fetchData();
   }, []);
   return (
-    <Flex>
+    <Flex height={"100vh"} alignItems={"center"} justifyContent={"center"}>
       <div>Success!</div>
-      {users.map((user, i) => (
-        <div key={`user-${i}`}>{user.email}</div>
-      ))}
     </Flex>
   );
 };

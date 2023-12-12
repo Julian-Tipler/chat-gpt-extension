@@ -83,6 +83,22 @@ async function protectedLoader({ request }: LoaderFunctionArgs) {
     const params = new URLSearchParams();
     params.set("from", new URL(request.url).pathname);
     return redirect("/login?" + params.toString());
+  } else {
+    chrome.runtime.sendMessage(
+      import.meta.env.VITE_EXTENSION_ID,
+      {
+        action: "saveWiseSessionToken",
+        token: auth.data.session,
+      },
+      (response) => {
+        if (response?.success) {
+          return redirect("/");
+        } else {
+          console.error("Error saving token", response.error);
+          return redirect("/login");
+        }
+      }
+    );
   }
   return { auth };
 }

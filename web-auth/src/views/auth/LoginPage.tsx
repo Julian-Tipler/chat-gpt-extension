@@ -5,7 +5,7 @@ export const LoginPage = () => {
   return (
     <Grid p={3}>
       <VStack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
-        <Button onClick={loginWithGoogle} />
+        <Button onClick={loginWithGoogle}>Login with Google</Button>
       </VStack>
     </Grid>
   );
