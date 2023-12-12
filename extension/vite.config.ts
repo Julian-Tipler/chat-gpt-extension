@@ -24,13 +24,6 @@ export default defineConfig({
           return "assets/[name]-[hash].js";
         },
         chunkFileNames: "assets/[name]-[hash].js",
-        assetFileNames: (assetInfo) => {
-          if (assetInfo.name === "content.css") {
-            return "content.css";
-          }
-          // For other assets, retain the default behavior with hashing
-          return "assets/[name]-[hash].[ext]";
-        },
       },
     },
   },
