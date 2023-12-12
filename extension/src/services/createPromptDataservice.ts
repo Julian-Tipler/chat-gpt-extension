@@ -12,7 +12,7 @@ export const createPromptDataservice = async (form: PromptFormState) => {
       });
 
       chrome.storage.sync.set({ prompts }, function() {
-        resolve(); // Resolve the promise when data is saved
+        resolve();
       });
     });
   });

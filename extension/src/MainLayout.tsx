@@ -9,8 +9,3 @@ export const MainLayout = () => {
     </>
   );
 };
-
-// body (600px)
-//    navigation bar (fixed height)
-//    main content (take up remaining space)
-//    
