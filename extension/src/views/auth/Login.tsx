@@ -1,25 +1,15 @@
-import { Button, Flex, Link, Text } from "@chakra-ui/react";
+import "./Login.css";
 
 export const Login = () => {
   const webAuthUrl =
     import.meta.env.VITE_WEB_AUTH_URL || "http://localhost:5173";
   return (
-    <Flex
-      height={"100vh"}
-      flexDir={"column"}
-      alignItems={"center"}
-      justifyContent={"center"}
-    >
-      <Text>Login here: No credit card required!</Text>
-      <Link isExternal href={webAuthUrl}>
-        <Button colorScheme="teal" size="md">
-          Login Here
-        </Button>
-        {/* <Button onClick={chromeLogin} colorScheme="teal" size="md">
-          Experimental google auth
-        </Button> */}
-      </Link>
-    </Flex>
+    <div className="login-container">
+      <p>Login here: No credit card required!</p>
+      <a href={webAuthUrl} target="_blank" rel="noopener">
+        <button className="submit-button">Login Here</button>
+      </a>
+    </div>
   );
 };
 
