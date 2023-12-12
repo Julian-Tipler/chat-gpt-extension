@@ -1,14 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Prompt } from "./PromptsPage";
 import { usePrompts } from "../../contexts/PromptsContext";
 import { colors } from "../../theme";
-import { useDisclosure } from "@chakra-ui/hooks";
 import { NewPromptModal } from "./NewPromptModal";
 import "./Prompts.css";
 
 export const Prompts = () => {
   const { prompts } = usePrompts();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [showForm, setShowForm] = useState(false);
 
   return (
     <div className="item-and-button-container">
@@ -17,8 +16,8 @@ export const Prompts = () => {
           <Prompt key={index} prompt={prompt} />
         ))}
       </div>
-      <NewPromptModal isOpen={isOpen} onClose={onClose} />
-      <PlusButton onOpen={onOpen} />
+      <NewPromptModal showForm={showForm} setShowForm={setShowForm} />
+      <PlusButton setShowForm={setShowForm} />
     </div>
   );
 };
@@ -60,10 +59,14 @@ const Prompt = ({ prompt }: { prompt: Prompt }) => {
   );
 };
 
-const PlusButton = ({ onOpen }: { onOpen: () => void }) => {
+const PlusButton = ({
+  setShowForm,
+}: {
+  setShowForm: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   return (
     <button
-      onClick={onOpen}
+      onClick={() => setShowForm(true)}
       id={"show-form-button"}
       style={{
         alignSelf: "center",

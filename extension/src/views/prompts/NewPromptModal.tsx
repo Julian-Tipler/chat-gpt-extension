@@ -18,11 +18,11 @@ export type PromptFormState = {
 };
 
 export const NewPromptModal = ({
-  isOpen,
-  onClose,
+  showForm,
+  setShowForm,
 }: {
-  isOpen: boolean;
-  onClose: () => void;
+  showForm: boolean;
+  setShowForm: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [form, setForm] = useState({
     name: "",
@@ -43,11 +43,11 @@ export const NewPromptModal = ({
     e.preventDefault();
     createPrompt(form);
     setForm({ name: "", text: "" });
-    onClose();
+    setShowForm(false);
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size={"sm"}>
+    <Modal isOpen={showForm} onClose={() => setShowForm(false)} size={"sm"}>
       <ModalOverlay />
       <ModalContent
         borderRadius={"1em"}
