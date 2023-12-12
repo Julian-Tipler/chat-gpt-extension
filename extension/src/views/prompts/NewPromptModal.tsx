@@ -1,8 +1,5 @@
 import { useState } from "react";
 import { usePrompts } from "../../contexts/PromptsContext";
-import { FormLabel } from "@chakra-ui/form-control";
-import { Input } from "@chakra-ui/input";
-import { Textarea } from "@chakra-ui/textarea";
 import "./NewPromptModal.css";
 
 export type PromptFormState = {
@@ -56,41 +53,31 @@ export const NewPromptModal = ({
                 className="prompt-form"
                 onSubmit={(e) => handleSubmit({ e, form, setForm })}
               >
-                <FormLabel htmlFor="prompt-form-name">Name:</FormLabel>
-                <Input
-                  size="sm"
-                  backgroundColor={"brand.background"}
-                  border="none"
-                  type="text"
+                <div className="input-header">Name:</div>
+                <input
+                  className="text-input"
                   id="prompt-form-name"
+                  type="text"
                   maxLength={30}
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
                   required
                 />
                 <br />
-                <FormLabel htmlFor="prompt-form-text">Text:</FormLabel>
-                <Textarea
-                  backgroundColor={"brand.background"}
-                  border="none"
+                <div className="input-header">Text:</div>
+                <textarea
+                  className="text-area"
                   id="prompt-form-text"
                   required
                   value={form.text}
                   onChange={(e) => setForm({ ...form, text: e.target.value })}
                 />
                 <br />
-
-                <Input
-                  className="clickable-button"
+                <input
+                  className="submit-button"
                   id="prompt-form-submit-button"
                   type="submit"
                   value="Add Prompt"
-                  bgColor={"brand.primary"}
-                  border={"none"}
-                  _hover={{
-                    backgroundColor: "brand.primaryHover",
-                    cursor: "pointer",
-                  }}
                 />
               </form>
             </div>
