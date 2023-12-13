@@ -19,7 +19,7 @@ const loginWithGoogle = async () => {
         access_type: "offline",
         prompt: "consent",
       },
-      redirectTo: false || "http://localhost:5173",
+      redirectTo: import.meta.env.VITE_WEB_AUTH_URL || "http://localhost:5173",
     },
   });
 };
