@@ -1,16 +1,6 @@
 import { useState } from "react";
 import { usePrompts } from "../../contexts/PromptsContext";
-import { Box } from "@chakra-ui/layout";
-import { FormLabel } from "@chakra-ui/form-control";
-import { Input } from "@chakra-ui/input";
-import { Textarea } from "@chakra-ui/textarea";
-import {
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
-} from "@chakra-ui/modal";
+import "./NewPromptModal.css";
 
 export type PromptFormState = {
   name: string;
@@ -18,11 +8,11 @@ export type PromptFormState = {
 };
 
 export const NewPromptModal = ({
-  isOpen,
-  onClose,
+  showForm,
+  setShowForm,
 }: {
-  isOpen: boolean;
-  onClose: () => void;
+  showForm: boolean;
+  setShowForm: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [form, setForm] = useState({
     name: "",
@@ -43,65 +33,57 @@ export const NewPromptModal = ({
     e.preventDefault();
     createPrompt(form);
     setForm({ name: "", text: "" });
-    onClose();
+    setShowForm(false);
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size={"sm"}>
-      <ModalOverlay />
-      <ModalContent
-        borderRadius={"1em"}
-        bgColor={"brand.cardBackground"}
-        padding={"1em"}
-      >
-        <ModalHeader>New Prompt</ModalHeader>
-        <ModalBody>
-          <form
-            id="prompt-form"
-            className="prompt-form"
-            onSubmit={(e) => handleSubmit({ e, form, setForm })}
+    <>
+      {showForm && (
+        <div className="modal-overlay" onClick={() => setShowForm(false)}>
+          <section
+            className="modal-content"
+            role="dialog"
+            aria-modal="true"
+            onClick={(e) => e.stopPropagation()}
           >
-            <Box id="prompt-form-name-container">
-              <FormLabel htmlFor="prompt-form-name">Name:</FormLabel>
-              <Input
-                size="sm"
-                backgroundColor={"brand.background"}
-                border="none"
-                type="text"
-                id="prompt-form-name"
-                maxLength={30}
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                required
-              />
-            </Box>
-            <br />
-            <FormLabel htmlFor="prompt-form-text">Text:</FormLabel>
-            <Textarea
-              backgroundColor={"brand.background"}
-              border="none"
-              id="prompt-form-text"
-              required
-              value={form.text}
-              onChange={(e) => setForm({ ...form, text: e.target.value })}
-            />
-            <br />
-
-            <Input
-              className="clickable-button"
-              id="prompt-form-submit-button"
-              type="submit"
-              value="Add Prompt"
-              bgColor={"brand.primary"}
-              border={"none"}
-              _hover={{
-                backgroundColor: "brand.primaryHover",
-                cursor: "pointer",
-              }}
-            />
-          </form>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
+            <header className="modal-header">New Prompt</header>
+            <div className="modal-body">
+              <form
+                id="prompt-form"
+                className="prompt-form"
+                onSubmit={(e) => handleSubmit({ e, form, setForm })}
+              >
+                <div className="input-header">Name:</div>
+                <input
+                  className="text-input"
+                  id="prompt-form-name"
+                  type="text"
+                  maxLength={30}
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  required
+                />
+                <br />
+                <div className="input-header">Text:</div>
+                <textarea
+                  className="text-area"
+                  id="prompt-form-text"
+                  required
+                  value={form.text}
+                  onChange={(e) => setForm({ ...form, text: e.target.value })}
+                />
+                <br />
+                <input
+                  className="submit-button"
+                  id="prompt-form-submit-button"
+                  type="submit"
+                  value="Add Prompt"
+                />
+              </form>
+            </div>
+          </section>
+        </div>
+      )}
+    </>
   );
 };

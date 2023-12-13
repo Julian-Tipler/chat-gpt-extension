@@ -1,4 +1,4 @@
-import { Box, Button, Flex } from "@chakra-ui/react";
+import "./NavigationBar.css";
 import { Title } from "./components/Title";
 const items = [
   {
@@ -14,15 +14,9 @@ const items = [
 export const NavigationBar = () => {
   const { pathname } = useLocation();
   return (
-    <Box paddingTop={"1rem"} backgroundColor={"brand.cardBackground"}>
+    <div className=".navigation-bar-container">
       <Title />
-      <Flex
-        className="navigation-items-container"
-        p={"0.5rem"}
-        gap={"2rem"}
-        alignItems={"center"}
-        justifyContent={"space-around"}
-      >
+      <div className="navigation-items-container">
         {items.map((item) => (
           <Item
             key={item.path}
@@ -31,8 +25,8 @@ export const NavigationBar = () => {
             selected={pathname === item.path}
           />
         ))}
-      </Flex>
-    </Box>
+      </div>
+    </div>
   );
 };
 
@@ -49,18 +43,15 @@ export const Item = ({
 }) => {
   const navigate = useNavigate();
   return (
-    <Flex flexDirection={"column"}>
-      <Button
+    <div className="navigation-item">
+      <button
         onClick={() => navigate(path)}
-        variant={"link"}
-        border="none"
-        _focus={{ outline: "none", border: "none" }}
-        textDecoration={selected ? "underline" : ""}
-        size={"sm"}
-        color={"text.primary"}
+        className={`.navigation-button ${
+          selected ? "navigation-button-selected" : ""
+        }}`}
       >
         {text}
-      </Button>
-    </Flex>
+      </button>
+    </div>
   );
 };

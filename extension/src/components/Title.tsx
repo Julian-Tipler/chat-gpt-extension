@@ -1,13 +1,5 @@
-import { Heading } from "@chakra-ui/layout";
+import "./Title.css";
 
 export const Title = () => {
-  return (
-    <Heading
-      size={"xl"}
-      color={"brand.primary"}
-      textAlign={"center"}
-    >
-      WiseGPT
-    </Heading>
-  );
+  return <header className="title">WiseGPT</header>;
 };

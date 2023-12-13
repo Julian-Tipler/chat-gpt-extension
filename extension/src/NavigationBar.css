@@ -1,0 +1,26 @@
+.navigation-bar-container {
+  padding-top: 1rem;
+  background-color: var(--color-background);
+}
+
+.navigation-items-container {
+  display: flex;
+  padding: 0.5rem;
+  gap: 2rem;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.navigation-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.navigation-button {
+  border: none;
+  text-decoration: none;
+}
+
+.navigation-button-selected {
+  text-decoration: underline;
+}
