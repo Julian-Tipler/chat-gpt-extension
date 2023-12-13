@@ -12,7 +12,7 @@ export const LoginPage = () => {
 };
 
 const loginWithGoogle = async () => {
-  const { data, error } = await supabase.auth.signInWithOAuth({
+  await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
       queryParams: {
