@@ -1,3 +1,4 @@
+/*global chrome*/
 import {
   createBrowserRouter,
   LoaderFunctionArgs,
@@ -77,13 +78,13 @@ async function protectedLoader({ request }: LoaderFunctionArgs) {
   // them to `/login` with a `from` parameter that allows login to redirect back
   // to this page upon successful authentication
   const auth = await supabase.auth.getSession();
-  console.log("auth", auth);
   // something like this: const session = supabase.auth.session();
   if (!auth?.data?.session) {
     const params = new URLSearchParams();
     params.set("from", new URL(request.url).pathname);
     return redirect("/login?" + params.toString());
   } else {
+    console.log("chrome", chrome);
     chrome.runtime.sendMessage(
       import.meta.env.VITE_EXTENSION_ID,
       {
