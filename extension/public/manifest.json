@@ -24,7 +24,7 @@
     "service_worker": "background.js"
   },
   "externally_connectable": {
-    "matches": ["*://localhost:*/*"]
+    "matches": ["*://localhost:*/*","*://chat-gpt-extension-login.onrender.com/*"]
   },
   "content_scripts": [
     {
