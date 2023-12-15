@@ -9,9 +9,9 @@ Thank you for looking at my project! WiseGPT in a simple wrapper for ChatGPT tha
 ## Features
 
 - Feature 1: ChatGPT textarea autocomplete. 
-https://github.com/Julian-Tipler/chat-gpt-extension/assets/59591817/188555bf-6347-4552-9922-727b30e19933
+![Screen Recording 2023-12-14 at 1 04 02 PM](https://github.com/Julian-Tipler/chat-gpt-extension/assets/59591817/38bab9e6-f392-4cf7-bce2-3529ec0f72ef)
 - Feature 2: Presaved prompts
-https://github.com/Julian-Tipler/chat-gpt-extension/assets/59591817/ed878827-8727-4948-82c8-c248c32a11dc
+![Screen Recording 2023-12-14 at 4 33 34 PM](https://github.com/Julian-Tipler/chat-gpt-extension/assets/59591817/9937cc49-6e47-4009-b9cc-cd47bed655f4)
 
 
 ## Installation
