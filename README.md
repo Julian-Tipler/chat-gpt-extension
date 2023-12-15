@@ -5,6 +5,7 @@ Thank you for looking at my project! WiseGPT in a simple wrapper for ChatGPT's U
 ## Table of Contents
 
 - [Features](#features)
+- [Installation](#Installation)
 
 ## Features
 
@@ -22,6 +23,7 @@ Thank you for looking at my project! WiseGPT in a simple wrapper for ChatGPT's U
    git clone https://github.com/Julian-Tipler/chat-gpt-extension.git
 
    cd extension
+   npm install
    npm run watch
 
    ```
