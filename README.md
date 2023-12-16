@@ -4,9 +4,9 @@ WiseGPT in a simple wrapper for ChatGPT's UI that adds some features that @zoesc
 
 ## Table of Contents
 
-- [Features](#Features)
-- [Technologies](#Technologies)
-- [Installation](#Installation)
+- [About The Project](#about-the-project)
+- [Technologies](#technologies)
+- [Installation](#installation)
 
 ## About The Project
 
