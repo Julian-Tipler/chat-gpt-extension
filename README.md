@@ -7,14 +7,26 @@ WiseGPT in a simple wrapper for ChatGPT's UI that adds some features that @zoesc
 - [Features](#features)
 - [Installation](#Installation)
 
-## Features
+## About The Project
 
-### ChatGPT textarea autocomplete. 
-![Screen Recording 2023-12-14 at 1 04 02 PM](https://github.com/Julian-Tipler/chat-gpt-extension/assets/59591817/38bab9e6-f392-4cf7-bce2-3529ec0f72ef)
-### Presaved prompts
-![Screen Recording 2023-12-14 at 4 33 34 PM](https://github.com/Julian-Tipler/chat-gpt-extension/assets/59591817/9937cc49-6e47-4009-b9cc-cd47bed655f4)
+Fellow dev @zoeschmitt and I use ChatGPT at our jobs every single day. While the underlying technology in incredibly impressive, there were a few frontend features the two of us wanted to improve the developer experience. 
+
+* ChatGPT textarea autocomplete.
+<br/>
+  <img src="https://github.com/Julian-Tipler/chat-gpt-extension/assets/59591817/38bab9e6-f392-4cf7-bce2-3529ec0f72ef" alt="autocomplete demonstration" width="600" />
+
+* Presaved prompts
+<br/>
+
+  <img src="https://github.com/Julian-Tipler/chat-gpt-extension/assets/59591817/9937cc49-6e47-4009-b9cc-cd47bed655f4" alt="presaved prompt demonstration" width="600" />
 
 
+### Technologies
+* ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+* ![Google Chrome](https://img.shields.io/badge/Google%20Chrome-4285F4?style=for-the-badge&logo=GoogleChrome&logoColor=white)
+* ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
+* ![ChatGPT](https://img.shields.io/badge/chatGPT-74aa9c?style=for-the-badge&logo=openai&logoColor=white)
+  
 ## Installation
 
 1. Clone the repository:
