@@ -1,6 +1,7 @@
 <h1 align="center">WiseGPT</h1>
-
+<p align="center">
 WiseGPT in a simple wrapper for ChatGPT's UI that adds some features that @zoeschmitt and I have wanted for personal use. Perhaps others can benefit from this as well.
+</p>
 
 ## Table of Contents
 
