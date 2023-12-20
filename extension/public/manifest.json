@@ -5,7 +5,6 @@
   "version": "1.0",
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnS7bW0bTyhZKOA1W2yf3DFc2RwAlETDyf00EgdfeBwc1+qx1XkQdoiBklBwAfZK14hXMgD37mTjprm/5eB8gPT/sDoWWFZCdjlq+4HkPBTEw8n3frvA1nqYmWZ5LHUHkJrjGcghwSw64Mjsy52LG2eC9TLP7PH8dxAy9Los4p6HnpnV3wPJm7H4bHojeHXL/aX7xxecShnJHvkxRNWKw3Egm0Oq7eYC7b+E9A5xib9DVtSWYf7+Rdh2rqt6RYbo3PMPKV0NU/DyX7uUfhrKFDbas+y3qQCj8VyqXoqkmuEdw/c0jtBwuUhleyt/TizaJxo735IAjwu3u+U//5qGRtQIDAQAB",
   "permissions": [
-    "identity",
     "storage",
     "scripting",
     "webRequest"
