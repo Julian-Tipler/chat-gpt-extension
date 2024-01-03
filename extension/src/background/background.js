@@ -32,6 +32,9 @@ function saveWiseSessionToken(token) {
   });
 }
 
+// This doesn't descriminate where teh 401 is coming from
+// This is an issue because if any 401 is received regardless of the URL
+// the user will be logged out
 chrome.webRequest.onHeadersReceived.addListener(
   function(details) {
     // Check if the response has a 401 status code
