@@ -1,6 +1,6 @@
 <h1 align="center">WiseGPT</h1>
 <p align="center">
-WiseGPT is a simple wrapper for ChatGPT's UI that adds some features that [Zoe Schmitt](https://github.com/zoeschmitt) and I have wanted for personal use. Perhaps others can benefit from this as well.
+WiseGPT is a simple wrapper for ChatGPT's UI that adds some features that <a href="https://github.com/zoeschmitt">Zoe Schmitt</a> and I have wanted for personal use. Perhaps others can benefit from this as well.
 </p>
 
 ## Table of Contents
