@@ -1,28 +1,44 @@
 import React, { useState } from "react";
-import { Prompt as PromptType } from "./PromptsPage";
+import { Prompt, Prompt as PromptType } from "./PromptsPage";
 import { usePrompts } from "../../contexts/PromptsContext";
 import { colors } from "../../theme";
-import { NewPromptModal } from "./NewPromptModal";
+import { PromptModal } from "./PromptModal";
 import "./Prompts.css";
 
 export const Prompts = () => {
   const { prompts } = usePrompts();
-  const [showForm, setShowForm] = useState(false);
-
+  const [showForm, setShowForm] = useState<boolean>(false);
+  const [editedPrompt, setEditedPrompt] = useState<PromptType | null>(null);
   return (
     <div className="item-and-button-container">
       <div className="item-container">
         {prompts.map((prompt, index) => (
-          <Prompt key={index} prompt={prompt} />
+          <Prompt
+            key={index}
+            prompt={prompt}
+            setEditedPrompt={setEditedPrompt}
+            setShowForm={setShowForm}
+          />
         ))}
       </div>
-      <PlusButton setShowForm={setShowForm} />
-      <NewPromptModal showForm={showForm} setShowForm={setShowForm} />
+      <PlusButton setShowForm={setShowForm} setEditedPrompt={setEditedPrompt} />
+      {showForm && <PromptModal
+        setShowForm={setShowForm}
+        editedPrompt={editedPrompt}
+      />}
     </div>
   );
 };
 
-const Prompt = ({ prompt }: { prompt: PromptType }) => {
+const Prompt = ({
+  prompt,
+  setEditedPrompt,
+  setShowForm,
+}: {
+  prompt: PromptType;
+  setEditedPrompt: React.Dispatch<React.SetStateAction<Prompt | null>>;
+  setShowForm: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const { deletePrompt } = usePrompts();
 
   const handleDelete = ({
@@ -34,6 +50,16 @@ const Prompt = ({ prompt }: { prompt: PromptType }) => {
   }) => {
     e.preventDefault();
     deletePrompt(promptId);
+  };
+
+  const handleEdit = ({
+    e,
+  }: {
+    e: React.MouseEvent<HTMLElement, MouseEvent>;
+  }) => {
+    e.preventDefault();
+    setEditedPrompt(prompt);
+    setShowForm(true);
   };
 
   return (
@@ -57,9 +83,9 @@ const Prompt = ({ prompt }: { prompt: PromptType }) => {
         <button
           id={`prompt-${prompt.id}`}
           className={"prompt-button"}
-          onClick={(e) => handleDelete({ e, promptId: prompt.id })}
+          onClick={(e) => handleEdit({ e })}
         >
-          <i className="fas fa-" />
+          <i className="fa-solid fa-pen-to-square"></i>
         </button>
       </div>
     </div>
@@ -68,12 +94,17 @@ const Prompt = ({ prompt }: { prompt: PromptType }) => {
 
 const PlusButton = ({
   setShowForm,
+  setEditedPrompt,
 }: {
   setShowForm: React.Dispatch<React.SetStateAction<boolean>>;
+  setEditedPrompt: React.Dispatch<React.SetStateAction<Prompt | null>>;
 }) => {
   return (
     <button
-      onClick={() => setShowForm(true)}
+      onClick={() => {
+        setShowForm(true);
+        setEditedPrompt(null);
+      }}
       id={"show-form-button"}
       style={{
         alignSelf: "center",
@@ -92,7 +123,7 @@ const PlusButton = ({
         outline: "none",
         alignContent: "center",
         flexShrink: 0,
-        margin: "0.5rem"
+        margin: "0.5rem",
       }}
     >
       +
