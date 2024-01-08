@@ -5,10 +5,6 @@ const items = [
     text: "Prompts",
     path: "/",
   },
-  {
-    text: "Settings",
-    path: "/settings",
-  },
 ];
 
 export const NavigationBar = () => {

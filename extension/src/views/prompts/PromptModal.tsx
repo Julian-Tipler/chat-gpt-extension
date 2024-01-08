@@ -48,7 +48,9 @@ export const PromptModal = ({
         aria-modal="true"
         onClick={(e) => e.stopPropagation()}
       >
-        <header className="modal-header">New Prompt</header>
+        <header className="modal-header">
+          {editedPrompt ? "Edit Prompt" : "Create Prompt"}
+        </header>
         <div className="modal-body">
           <form
             id="prompt-form"
@@ -76,7 +78,7 @@ export const PromptModal = ({
             />
             <br />
             <input
-              className="submit-button"
+              className="submit-button modal-submit-button"
               id="prompt-form-submit-button"
               type="submit"
               value={editedPrompt ? "Update Prompt" : "Edit Prompt"}
