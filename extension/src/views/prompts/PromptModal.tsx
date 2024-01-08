@@ -79,7 +79,7 @@ export const PromptModal = ({
               className="submit-button"
               id="prompt-form-submit-button"
               type="submit"
-              value="Add Prompt"
+              value={editedPrompt ? "Update Prompt" : "Edit Prompt"}
             />
           </form>
         </div>

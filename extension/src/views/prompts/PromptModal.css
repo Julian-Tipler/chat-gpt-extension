@@ -24,6 +24,7 @@
   outline: transparent solid 2px;
   border-radius: 1em;
   padding: 1em;
+  font-size: small;
 }
 
 .modal-header {
