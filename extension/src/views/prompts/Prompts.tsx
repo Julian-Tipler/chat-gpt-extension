@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Prompt } from "./PromptsPage";
+import { Prompt as PromptType } from "./PromptsPage";
 import { usePrompts } from "../../contexts/PromptsContext";
 import { colors } from "../../theme";
 import { NewPromptModal } from "./NewPromptModal";
@@ -16,13 +16,13 @@ export const Prompts = () => {
           <Prompt key={index} prompt={prompt} />
         ))}
       </div>
-      <NewPromptModal showForm={showForm} setShowForm={setShowForm} />
       <PlusButton setShowForm={setShowForm} />
+      <NewPromptModal showForm={showForm} setShowForm={setShowForm} />
     </div>
   );
 };
 
-const Prompt = ({ prompt }: { prompt: Prompt }) => {
+const Prompt = ({ prompt }: { prompt: PromptType }) => {
   const { deletePrompt } = usePrompts();
 
   const handleDelete = ({
@@ -42,17 +42,24 @@ const Prompt = ({ prompt }: { prompt: Prompt }) => {
       <div className={"item-buttons"}>
         <button
           id={`prompt-${prompt.id}`}
-          className={"clickable-button copy-button"}
+          className={"prompt-button"}
           onClick={(e) => handlePaste({ e, prompt })}
         >
           <i className="fas fa-copy" />
         </button>
         <button
           id={`prompt-${prompt.id}`}
-          className={"clickable-button copy-button"}
+          className={"prompt-button"}
           onClick={(e) => handleDelete({ e, promptId: prompt.id })}
         >
           <i className="fas fa-trash" />
+        </button>
+        <button
+          id={`prompt-${prompt.id}`}
+          className={"prompt-button"}
+          onClick={(e) => handleDelete({ e, promptId: prompt.id })}
+        >
+          <i className="fas fa-" />
         </button>
       </div>
     </div>
@@ -77,15 +84,15 @@ const PlusButton = ({
         color: colors.text.primary,
         border: "none",
         borderRadius: "50%",
-        width: "1.25em",
-        height: "1.25em",
-        fontSize: "10px",
+        width: "1.25rem",
+        fontSize: "10 px",
         lineHeight: 1,
         cursor: "pointer",
         textAlign: "center",
         outline: "none",
         alignContent: "center",
         flexShrink: 0,
+        margin: "0.5rem"
       }}
     >
       +
@@ -98,7 +105,7 @@ const handlePaste = ({
   prompt,
 }: {
   e: React.MouseEvent<HTMLElement, MouseEvent>;
-  prompt: Prompt;
+  prompt: PromptType;
 }) => {
   e.preventDefault();
   chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
