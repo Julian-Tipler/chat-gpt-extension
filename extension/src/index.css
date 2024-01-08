@@ -24,6 +24,12 @@
   --text-primary: #fff;
   --text-secondary: #ccc;
   --text-tertiary: #999;
+
+  /* font sizes */
+  --font-small: 0.75rem;
+  --font-medium: 1rem;
+  --font-large: 1.25rem;
+  --font-xlarge: 1.5rem;
 }
 
 /* CSS RESET */
@@ -158,7 +164,7 @@ button:focus-visible {
 /* prestyled */
 
 .input-header {
-  font-size: 1.2em;
+  font-size: var(--font-small);
   font-weight: 500;
   margin-bottom: 0.5em;
 }
@@ -186,6 +192,7 @@ button:focus-visible {
   background-clip: inherit;
   background-color: var(--color-background);
   border: none;
+  font-size: var(--font-small);
 }
 
 .text-area {
@@ -210,6 +217,8 @@ button:focus-visible {
   background-origin: inherit;
   background-clip: inherit;
   background-color: var(--color-background);
+  resize: none;
+  font-size: var(--font-small);
   border: none;
 }
 
@@ -218,7 +227,7 @@ button:focus-visible {
   background-color: var(--color-primary);
   color: var(--text-primary);
   font-weight: 500;
-  font-size: 1em;
+  font-size: var(--font-small);
   padding: 0.6em 1.2em;
   border-radius: 8px;
   border: 1px solid transparent;

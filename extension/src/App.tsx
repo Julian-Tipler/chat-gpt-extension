@@ -77,8 +77,11 @@ async function settingsLoader() {
   const { wiseSessionToken } = await chrome.storage.local.get([
     "wiseSessionToken",
   ]);
-  const user = await supabase.auth.getUser(wiseSessionToken?.access_token);
-  console.log("user", user);
+  const auth = await supabase.auth.getUser(wiseSessionToken?.access_token);
+  if (!auth.data?.user) {
+    return redirect("/login");
+  }
+  return { auth };
 }
 
 export default App;
