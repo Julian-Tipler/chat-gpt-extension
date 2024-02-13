@@ -6,7 +6,6 @@ export const setUpResponseHighlighting = () => {
 
   // Fetch main element
   const main = document.querySelector("main");
-  console.log("main", main);
   const config = { childList: true, subtree: true };
 
   // Finds all divs with role of assistant
