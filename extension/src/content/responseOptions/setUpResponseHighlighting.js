@@ -24,6 +24,7 @@ export const setUpResponseHighlighting = () => {
                 if (p.nodeName === "P") {
                   // Create a button absolutely positioned right of the paragraph
                   p.style.position = "relative";
+                  p.style.overflow = "visible";
                   const sidebar = Sidebar(p.textContent);
                   p.appendChild(sidebar.render());
                 }

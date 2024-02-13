@@ -1,20 +1,10 @@
+import "./SidebarButton.css";
+import "./OtherCss.css";
+
 export function Sidebar(text) {
   const render = () => {
     const sideBar = document.createElement("div");
-    // Apply initial styles
-    sideBar.style.border = "none";
-    sideBar.style.backgroundColor = "#646cff";
-    sideBar.style.padding = "0px 3px";
-    sideBar.style.color = "white";
-    sideBar.style.cursor = "pointer";
-    sideBar.style.transition = "background-color 0.3s ease";
-    sideBar.style.position = "absolute";
-    sideBar.style.top = 0;
-    sideBar.style.right = 0;
-    sideBar.style.height = "100%";
-    sideBar.style.borderRadius = "5px";
-    sideBar.style.opacity = "0.5";
-    sideBar.style.transition = "opacity 0.3s ease";
+    sideBar.classList.add("sidebar");
 
     const buttonContainer = document.createElement("div");
     buttonContainer.style.display = "flex";
@@ -25,16 +15,19 @@ export function Sidebar(text) {
     buttonContainer.style.justifyContent = "space-around";
     buttonContainer.style.alignItems = "center";
     buttonContainer.style.width = "0px";
-    buttonContainer.style.transition = "width 0.3s ease, transform 0.3s ease";
+    buttonContainer.style.transition =
+      "width 0.3s ease, height 0.3s ease, transform 0.3s ease";
 
     sideBar.addEventListener("mouseenter", () => {
       buttonContainer.style.visibility = "visible";
       sideBar.style.opacity = "1";
+      sideBar.style.minHeight = "100px";
       buttonContainer.style.width = "20px";
     });
     sideBar.addEventListener("mouseleave", () => {
       buttonContainer.style.visibility = "hidden";
       sideBar.style.opacity = "0.5";
+      sideBar.style.minHeight = "0";
       buttonContainer.style.width = "0px";
     });
 

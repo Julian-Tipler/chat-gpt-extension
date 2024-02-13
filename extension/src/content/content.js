@@ -1,3 +1,4 @@
+import "./index.css";
 import { syncGhostText } from "./ghostText/syncGhostText";
 import { resetAutocompleteText } from "./autocomplete/resetAutocompleteText";
 import { processStream } from "./autocomplete/helpers/processStream";
