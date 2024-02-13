@@ -1,8 +1,10 @@
 export function Sidebar(text) {
   const render = () => {
-    const sideBar = document.createElement("button");
+    const sideBar = document.createElement("div");
     // Apply initial styles
-    sideBar.style.border = "1px solid #007bff";
+    sideBar.style.border = "none";
+    sideBar.style.backgroundColor = "#646cff";
+    sideBar.style.padding = "0px 3px";
     sideBar.style.color = "white";
     sideBar.style.cursor = "pointer";
     sideBar.style.transition = "background-color 0.3s ease";
@@ -10,19 +12,30 @@ export function Sidebar(text) {
     sideBar.style.top = 0;
     sideBar.style.right = 0;
     sideBar.style.height = "100%";
-    sideBar.style.width = "10px";
+    sideBar.style.borderRadius = "5px";
+    sideBar.style.opacity = "0.5";
+    sideBar.style.transition = "opacity 0.3s ease";
 
     const buttonContainer = document.createElement("div");
-    buttonContainer.style.display = "none";
+    buttonContainer.style.display = "flex";
+    buttonContainer.style.height = "100%";
+    buttonContainer.style.overflow = "hidden"; // Hide overflow
+    buttonContainer.style.visibility = "hidden";
     buttonContainer.style.flexDirection = "column";
-    buttonContainer.style.justifyContent = "space-between";
+    buttonContainer.style.justifyContent = "space-around";
     buttonContainer.style.alignItems = "center";
-    buttonContainer.style.width = "10px";
+    buttonContainer.style.width = "0px";
+    buttonContainer.style.transition = "width 0.3s ease, transform 0.3s ease";
+
     sideBar.addEventListener("mouseenter", () => {
-      buttonContainer.style.display = "flex";
+      buttonContainer.style.visibility = "visible";
+      sideBar.style.opacity = "1";
+      buttonContainer.style.width = "20px";
     });
     sideBar.addEventListener("mouseleave", () => {
-      buttonContainer.style.display = "none";
+      buttonContainer.style.visibility = "hidden";
+      sideBar.style.opacity = "0.5";
+      buttonContainer.style.width = "0px";
     });
 
     const explainButton = ExplainButton(text);
@@ -44,13 +57,13 @@ export function Sidebar(text) {
 const ExplainButton = (text) => {
   const render = () => {
     const explainButton = document.createElement("button");
-    explainButton.style.padding = "5px 5px";
+    explainButton.style.padding = "10px 10px";
     explainButton.style.border = "none";
+    explainButton.style.borderRadius = "10px";
     explainButton.style.backgroundColor = "yellow";
     explainButton.style.color = "white";
     explainButton.style.cursor = "pointer";
     explainButton.style.transition = "background-color 0.3s ease";
-    explainButton.style.position = "absolute";
     explainButton.style.bottom = 0;
     explainButton.style.right = 0;
 
@@ -77,13 +90,13 @@ const ExplainButton = (text) => {
 const CopyButton = () => {
   const render = () => {
     const copyButton = document.createElement("button");
-    copyButton.style.padding = "5px 5px";
+    copyButton.style.padding = "10px 10px";
     copyButton.style.border = "none";
+    copyButton.style.borderRadius = "10px";
     copyButton.style.backgroundColor = "green";
     copyButton.style.color = "white";
     copyButton.style.cursor = "pointer";
     copyButton.style.transition = "background-color 0.3s ease";
-    copyButton.style.position = "absolute";
     copyButton.style.top = 0;
     copyButton.style.right = 0;
 

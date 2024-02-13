@@ -1,4 +1,4 @@
-import { addSidebarToParagraph } from "./helpers/addSidebarToParagraph";
+import { Sidebar } from "./components/SidebarButton";
 
 export const setUpResponseHighlighting = () => {
   // Need to do a mutation observer that checks if new paragraphs are added.
@@ -23,7 +23,9 @@ export const setUpResponseHighlighting = () => {
               firstChild.childNodes.forEach((p) => {
                 if (p.nodeName === "P") {
                   // Create a button absolutely positioned right of the paragraph
-                  addSidebarToParagraph(p);
+                  p.style.position = "relative";
+                  const sidebar = Sidebar(p.textContent);
+                  p.appendChild(sidebar.render());
                 }
               });
             });
