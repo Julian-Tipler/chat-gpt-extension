@@ -1,3 +1,4 @@
+import { showToast } from "../../components/toast";
 import { copyIcon, explainIcon } from "../../icons";
 import "./ResponseHelper.css";
 
@@ -58,8 +59,8 @@ const ExplainButton = (text) => {
         const submitButton = document.querySelector(
           "button[data-testid=send-button]"
         );
-        if(submitButton) {
-          submitButton.click()
+        if (submitButton) {
+          submitButton.click();
         }
         textarea.focus();
       }
@@ -74,6 +75,7 @@ const CopyButton = (text) => {
     const copyButton = document.createElement("button");
     copyButton.classList.add("copy-button", "sidebar-button");
     copyButton.innerHTML = copyIcon;
+    copyButton.addEventListener("click", () => showToast("Copied to clipboard!"));
 
     copyButton.onclick = (e) => {
       e.preventDefault();
