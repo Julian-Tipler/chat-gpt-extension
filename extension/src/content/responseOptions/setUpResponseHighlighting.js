@@ -4,40 +4,69 @@ export const setUpResponseHighlighting = () => {
   // Need to do a mutation observer that checks if new paragraphs are added.
   // If they are, append the clickable button to those paragraphs
 
-  // Fetch main element
-  const main = document.querySelector("main");
-  const config = { childList: true, subtree: true };
-
-  // Finds all divs with role of assistant
-  const callback = function(mutationsList) {
-    for (const mutation of mutationsList) {
-      if (mutation.type === "childList") {
-        mutation.addedNodes.forEach((node) => {
-          if (node.nodeType === 1 && node.querySelectorAll) {
-            const matchingDescendants = node.querySelectorAll(
-              'div[data-message-author-role="assistant"]'
-            );
-            matchingDescendants.forEach((descendant) => {
-              const firstChild = descendant.firstChild;
-              // Iterate through descendents of firstChild
-              firstChild.childNodes.forEach((p) => {
-                if (p.nodeName === "P") {
-                  // Create a button absolutely positioned right of the paragraph
-                  p.style.position = "relative";
-                  p.style.overflow = "visible";
-                  const sidebar = Sidebar(p.textContent);
-                  p.appendChild(sidebar.render());
-                }
-              });
-            });
-          }
-        });
-      }
-    }
+  const messages = document.querySelector('[role="presentation"]').firstChild;
+  const config = {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeOldValue: true,
   };
 
   const observer = new MutationObserver(callback);
-  observer.observe(main, config);
+  observer.observe(messages, config);
 
-  // select div where role is presentation
+  // also need to observe when a message is finished (results-streaming class disappears)
+};
+
+const callback = function(mutationsList) {
+  for (const mutation of mutationsList) {
+    handleExistingMessages(mutation);
+    handleNewMessages(mutation);
+  }
+};
+
+const handleExistingMessages = (mutation) => {
+  if (mutation.type === "childList") {
+    mutation.addedNodes.forEach((node) => {
+      if (node.nodeType === 1 && node.querySelectorAll) {
+        const matchingDescendants = node.querySelectorAll(
+          'div[data-message-author-role="assistant"]'
+        );
+        matchingDescendants.forEach((descendant) => {
+          // Prevents the sidebar from causing overflow
+          descendant.style.overflowX = "visible";
+          // create a mutation observer for the descendent
+          const firstChild = descendant.firstChild;
+          addSidebarsToParagraphsOfFirstChild(firstChild);
+          // Iterate through descendents of firstChild
+        });
+      }
+    });
+  }
+};
+
+const handleNewMessages = (mutation) => {
+  // Check for attribute changes which might indicate class changes
+  if (mutation.type === "attributes" && mutation.attributeName === "class") {
+    const firstChild = mutation.target;
+    // Check if the target is a div and if it no longer contains the 'results-streaming' class
+    if (
+      mutation.oldValue.split(" ").includes("result-streaming") &&
+      !firstChild.classList.contains("result-streaming")
+    ) {
+      addSidebarsToParagraphsOfFirstChild(firstChild);
+    }
+  }
+};
+
+const addSidebarsToParagraphsOfFirstChild = (firstChild) => {
+  firstChild.childNodes.forEach((p) => {
+    if (p.nodeName === "P") {
+      // Create a button absolutely positioned right of the paragraph
+      p.style.position = "relative";
+      p.style.overflow = "visible";
+      const sidebar = Sidebar(p.textContent);
+      p.appendChild(sidebar.render());
+    }
+  });
 };

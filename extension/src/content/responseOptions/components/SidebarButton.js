@@ -3,8 +3,8 @@ import "./OtherCss.css";
 
 export function Sidebar(text) {
   const render = () => {
-    const sideBar = document.createElement("div");
-    sideBar.classList.add("sidebar");
+    const sidebar = document.createElement("div");
+    sidebar.classList.add("sidebar");
 
     const buttonContainer = document.createElement("div");
     buttonContainer.style.display = "flex";
@@ -18,16 +18,16 @@ export function Sidebar(text) {
     buttonContainer.style.transition =
       "width 0.3s ease, height 0.3s ease, transform 0.3s ease";
 
-    sideBar.addEventListener("mouseenter", () => {
+    sidebar.addEventListener("mouseenter", () => {
       buttonContainer.style.visibility = "visible";
-      sideBar.style.opacity = "1";
-      sideBar.style.minHeight = "100px";
+      sidebar.style.opacity = "1";
+      sidebar.style.minHeight = "100px";
       buttonContainer.style.width = "20px";
     });
-    sideBar.addEventListener("mouseleave", () => {
+    sidebar.addEventListener("mouseleave", () => {
       buttonContainer.style.visibility = "hidden";
-      sideBar.style.opacity = "0.5";
-      sideBar.style.minHeight = "0";
+      sidebar.style.opacity = "0.5";
+      sidebar.style.minHeight = "0px";
       buttonContainer.style.width = "0px";
     });
 
@@ -37,11 +37,11 @@ export function Sidebar(text) {
     const copyButton = CopyButton();
     buttonContainer.appendChild(copyButton.render());
 
-    sideBar.appendChild(buttonContainer);
+    sidebar.appendChild(buttonContainer);
     // const text = document.createTextNode(text);
-    // sideBar.appendChild(text);
+    // sidebar.appendChild(text);
 
-    return sideBar;
+    return sidebar;
   };
 
   return { render };
@@ -50,15 +50,7 @@ export function Sidebar(text) {
 const ExplainButton = (text) => {
   const render = () => {
     const explainButton = document.createElement("button");
-    explainButton.style.padding = "10px 10px";
-    explainButton.style.border = "none";
-    explainButton.style.borderRadius = "10px";
-    explainButton.style.backgroundColor = "yellow";
-    explainButton.style.color = "white";
-    explainButton.style.cursor = "pointer";
-    explainButton.style.transition = "background-color 0.3s ease";
-    explainButton.style.bottom = 0;
-    explainButton.style.right = 0;
+    explainButton.classList.add("explain-button");
 
     explainButton.onclick = (e) => {
       e.preventDefault();
@@ -67,9 +59,9 @@ const ExplainButton = (text) => {
       if (textarea) {
         const currentText = textarea.value.trim();
         if (currentText !== "") {
-          textarea.value += "\n\n" + text;
+          textarea.value += "\n\n" + "Tell me more:" + "\n\n" + text;
         } else {
-          textarea.value += text;
+          textarea.value += "Tell me more:" + "\n\n" + text;
         }
         textarea.dispatchEvent(new Event("input", { bubbles: true }));
         textarea.focus();
