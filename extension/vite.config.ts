@@ -38,5 +38,4 @@ export default defineConfig({
       },
     },
   },
-  // assetsInclude: ["src/content/content.css"],
 });
