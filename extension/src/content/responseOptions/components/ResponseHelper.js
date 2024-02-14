@@ -1,23 +1,24 @@
-import "./SidebarButton.css";
+import { copyIcon, explainIcon } from "../../icons";
+import "./ResponseHelper.css";
 
-export function Sidebar(text) {
+export function ResponseHelper(text) {
   const render = () => {
-    const sidebar = document.createElement("div");
-    sidebar.classList.add("sidebar");
+    const responseHelper = document.createElement("div");
+    responseHelper.classList.add("response-helper");
 
     const buttonContainer = document.createElement("div");
     buttonContainer.classList.add("button-container");
 
-    sidebar.addEventListener("mouseenter", () => {
+    responseHelper.addEventListener("mouseenter", () => {
       buttonContainer.style.visibility = "visible";
-      sidebar.style.opacity = "1";
-      sidebar.style.minHeight = "100px";
+      responseHelper.style.opacity = "1";
+      responseHelper.style.minHeight = "100px";
       buttonContainer.style.width = "20px";
     });
-    sidebar.addEventListener("mouseleave", () => {
+    responseHelper.addEventListener("mouseleave", () => {
       buttonContainer.style.visibility = "hidden";
-      sidebar.style.opacity = "0.5";
-      sidebar.style.minHeight = "0px";
+      responseHelper.style.opacity = "0.5";
+      responseHelper.style.minHeight = "0px";
       buttonContainer.style.width = "0px";
     });
 
@@ -29,9 +30,9 @@ export function Sidebar(text) {
     addButtonClickAnimation(copyButton);
     buttonContainer.appendChild(copyButton);
 
-    sidebar.appendChild(buttonContainer);
+    responseHelper.appendChild(buttonContainer);
 
-    return sidebar;
+    return responseHelper;
   };
 
   return { render };
@@ -40,7 +41,8 @@ export function Sidebar(text) {
 const ExplainButton = (text) => {
   const render = () => {
     const explainButton = document.createElement("button");
-    explainButton.classList.add("explain-button");
+    explainButton.classList.add("explain-button", "sidebar-button");
+    explainButton.innerHTML = explainIcon;
 
     explainButton.onclick = (e) => {
       e.preventDefault();
@@ -64,10 +66,8 @@ const ExplainButton = (text) => {
 const CopyButton = (text) => {
   const render = () => {
     const copyButton = document.createElement("button");
-    copyButton.classList.add("copy-button");
-    const icon = document.createElement("i");
-    icon.classList.add("button-icon", "fas", "fa-copy");
-    copyButton.appendChild(icon);
+    copyButton.classList.add("copy-button", "sidebar-button");
+    copyButton.innerHTML = copyIcon;
 
     copyButton.onclick = (e) => {
       e.preventDefault();

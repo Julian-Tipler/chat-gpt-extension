@@ -1,4 +1,4 @@
-import { Sidebar } from "./components/SidebarButton";
+import { ResponseHelper } from "./components/ResponseHelper";
 
 export const setUpResponseHighlighting = () => {
   // Need to do a mutation observer that checks if new paragraphs are added.
@@ -21,7 +21,7 @@ export const setUpResponseHighlighting = () => {
 const callback = function(mutationsList) {
   for (const mutation of mutationsList) {
     handleExistingMessages(mutation);
-    handleNewMessages(mutation);
+    handleNewMessage(mutation);
   }
 };
 
@@ -33,19 +33,17 @@ const handleExistingMessages = (mutation) => {
           'div[data-message-author-role="assistant"]'
         );
         matchingDescendants.forEach((descendant) => {
-          // Prevents the sidebar from causing overflow
+          // Prevents the responseHelper from causing overflow
           descendant.style.overflowX = "visible";
-          // create a mutation observer for the descendent
           const firstChild = descendant.firstChild;
-          addSidebarsToParagraphsOfFirstChild(firstChild);
-          // Iterate through descendents of firstChild
+          addResponseHelper(firstChild);
         });
       }
     });
   }
 };
 
-const handleNewMessages = (mutation) => {
+const handleNewMessage = (mutation) => {
   // Check for attribute changes which might indicate class changes
   if (mutation.type === "attributes" && mutation.attributeName === "class") {
     const firstChild = mutation.target;
@@ -54,18 +52,18 @@ const handleNewMessages = (mutation) => {
       mutation.oldValue.split(" ").includes("result-streaming") &&
       !firstChild.classList.contains("result-streaming")
     ) {
-      addSidebarsToParagraphsOfFirstChild(firstChild);
+      addResponseHelper(firstChild);
     }
   }
 };
 
-const addSidebarsToParagraphsOfFirstChild = (firstChild) => {
+const addResponseHelper = (firstChild) => {
   firstChild.childNodes.forEach((p) => {
     if (p.nodeName === "P") {
       // Create a button absolutely positioned right of the paragraph
       p.style.position = "relative";
       p.style.overflow = "visible";
-      const sidebar = Sidebar(p.textContent);
+      const sidebar = ResponseHelper(p.textContent);
       p.appendChild(sidebar.render());
     }
   });

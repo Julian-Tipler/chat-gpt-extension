@@ -1,4 +1,4 @@
-.sidebar {
+.response-helper {
   border: none;
   background-color: #646cff;
   padding: 0px 3px;
@@ -26,41 +26,36 @@
   transition: width 0.3s ease, height 0.3s ease, transform 0.3s ease;
 }
 
-.explain-button {
+.sidebar-button {
   height: 20px;
   width: 20px;
   border: none;
   border-radius: 10px;
-  background-color: yellow;
-  color: white;
   cursor: pointer;
   transition: background-color 0.3s ease;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.explain-button {
+  background-color: yellow;
+  color: white;
 }
 .explain-button:hover {
   background-color: #e0e000;
 }
 
 .copy-button {
-  height: 20px;
-  width: 20px;
-  border: none;
-  border-radius: 10px;
   background-color: green;
   color: white;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 .copy-button:hover {
   background-color: #007a00;
 }
 
-.button-icon {
-  padding: "0px";
-  font-size: "4px";
+.sidebar-button > svg {
+  height: 16px;
+  width: 16px;
+  fill: black;
 }

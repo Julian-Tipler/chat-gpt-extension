@@ -10,19 +10,15 @@ import { expandTextareas } from "./ghostText/expandTextareas";
 import { setUpResponseHighlighting } from "./responseOptions/setUpResponseHighlighting";
 
 console.log("content.js 🚀🚀");
-// (function loadFontAwesome() {
-//   const link = document.createElement("link");
-//   link.href =
-//     "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css";
-//   link.rel = "stylesheet";
-//   document.head.appendChild(link);
-// })();
-// console.log("content.js 🚀🚀🚀");
 
 const apiUrl = import.meta.env.VITE_API_URL + "/functions/v1/autocomplete";
 const accessToken = import.meta.env.VITE_WISE_API_TOKEN;
 
 window.addEventListener("load", () => {
+  init();
+});
+
+function init() {
   // existing elements
   const textarea = document.querySelector("textarea");
   const parent = textarea ? textarea.parentElement : null;
@@ -47,7 +43,12 @@ window.addEventListener("load", () => {
 
   // Check if a textarea element was found and set listeners
   if (textarea && parent && form) {
-    setAutocompleteListeners({ textarea, wiseTextarea, parent, form });
+    setAutocompleteListeners({
+      textarea,
+      wiseTextarea,
+      parent,
+      form,
+    });
   } else {
     console.log("No textarea found on the page.");
   }
@@ -100,7 +101,7 @@ window.addEventListener("load", () => {
 
   // Set other listeners
   setUpResponseHighlighting();
-});
+}
 
 // Resets any spans and then updates the innerText to match the wiseTextarea text
 // TODO maybe I should include space/paragraph logic here?
