@@ -13,7 +13,7 @@ export function ResponseHelper(text) {
       buttonContainer.style.visibility = "visible";
       responseHelper.style.opacity = "1";
       responseHelper.style.minHeight = "100px";
-      buttonContainer.style.width = "20px";
+      buttonContainer.style.width = "22px";
     });
     responseHelper.addEventListener("mouseleave", () => {
       buttonContainer.style.visibility = "hidden";

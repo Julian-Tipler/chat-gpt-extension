@@ -1,9 +1,6 @@
 import { ResponseHelper } from "./components/ResponseHelper";
 
 export const setUpResponseHighlighting = () => {
-  // Need to do a mutation observer that checks if new paragraphs are added.
-  // If they are, append the clickable button to those paragraphs
-
   const main = document.querySelector("main");
   const config = {
     childList: true,
@@ -14,8 +11,6 @@ export const setUpResponseHighlighting = () => {
 
   const observer = new MutationObserver(callback);
   observer.observe(main, config);
-
-  // also need to observe when a message is finished (results-streaming class disappears)
 };
 
 const callback = function(mutationsList) {
@@ -44,10 +39,9 @@ const handleExistingMessages = (mutation) => {
 };
 
 const handleNewMessage = (mutation) => {
-  // Check for attribute changes which might indicate class changes
   if (mutation.type === "attributes" && mutation.attributeName === "class") {
     const firstChild = mutation.target;
-    // Check if the target is a div and if it no longer contains the 'results-streaming' class
+    // Checks if the result has streamed and the responseHelper can be added
     if (
       mutation.oldValue.split(" ").includes("result-streaming") &&
       !firstChild.classList.contains("result-streaming")
