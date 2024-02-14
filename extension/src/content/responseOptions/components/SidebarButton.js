@@ -7,16 +7,7 @@ export function Sidebar(text) {
     sidebar.classList.add("sidebar");
 
     const buttonContainer = document.createElement("div");
-    buttonContainer.style.display = "flex";
-    buttonContainer.style.height = "100%";
-    buttonContainer.style.overflow = "hidden"; // Hide overflow
-    buttonContainer.style.visibility = "hidden";
-    buttonContainer.style.flexDirection = "column";
-    buttonContainer.style.justifyContent = "space-around";
-    buttonContainer.style.alignItems = "center";
-    buttonContainer.style.width = "0px";
-    buttonContainer.style.transition =
-      "width 0.3s ease, height 0.3s ease, transform 0.3s ease";
+    buttonContainer.classList.add("button-container");
 
     sidebar.addEventListener("mouseenter", () => {
       buttonContainer.style.visibility = "visible";
@@ -31,11 +22,13 @@ export function Sidebar(text) {
       buttonContainer.style.width = "0px";
     });
 
-    const explainButton = ExplainButton(text);
-    buttonContainer.appendChild(explainButton.render());
+    const explainButton = ExplainButton(text).render();
+    addButtonClickAnimation(explainButton);
+    buttonContainer.appendChild(explainButton);
 
-    const copyButton = CopyButton();
-    buttonContainer.appendChild(copyButton.render());
+    const copyButton = CopyButton(text).render();
+    addButtonClickAnimation(copyButton);
+    buttonContainer.appendChild(copyButton);
 
     sidebar.appendChild(buttonContainer);
     // const text = document.createTextNode(text);
@@ -54,7 +47,6 @@ const ExplainButton = (text) => {
 
     explainButton.onclick = (e) => {
       e.preventDefault();
-      console.log(text);
       const textarea = document.querySelector("textarea");
       if (textarea) {
         const currentText = textarea.value.trim();
@@ -72,23 +64,28 @@ const ExplainButton = (text) => {
   return { render };
 };
 
-const CopyButton = () => {
+const CopyButton = (text) => {
   const render = () => {
     const copyButton = document.createElement("button");
-    copyButton.style.padding = "10px 10px";
-    copyButton.style.border = "none";
-    copyButton.style.borderRadius = "10px";
-    copyButton.style.backgroundColor = "green";
-    copyButton.style.color = "white";
-    copyButton.style.cursor = "pointer";
-    copyButton.style.transition = "background-color 0.3s ease";
-    copyButton.style.top = 0;
-    copyButton.style.right = 0;
+    copyButton.classList.add("copy-button");
 
     copyButton.onclick = (e) => {
       e.preventDefault();
+      navigator.clipboard.writeText(text);
     };
     return copyButton;
   };
   return { render };
+};
+
+const addButtonClickAnimation = (button) => {
+  button.addEventListener("click", (e) => {
+    const button = e.currentTarget;
+    button.style.transform = "scale(0.95)";
+    button.style.transition = " transform 0.1s ease";
+    setTimeout(() => {
+      button.style.transform = "scale(1)";
+      button.style.transition = " transform 0.3s ease";
+    }, 150);
+  });
 };
