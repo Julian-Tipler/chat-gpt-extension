@@ -50,9 +50,9 @@ const ExplainButton = (text) => {
       if (textarea) {
         const currentText = textarea.value.trim();
         if (currentText !== "") {
-          textarea.value += "\n\n" + "Tell me more:" + "\n\n" + text;
+          textarea.value += "\n\n" + "Please explain further:" + "\n\n" + text;
         } else {
-          textarea.value += "Tell me more:" + "\n\n" + text;
+          textarea.value += "Please explain further:" + "\n\n" + text;
         }
         textarea.dispatchEvent(new Event("input", { bubbles: true }));
         const submitButton = document.querySelector(

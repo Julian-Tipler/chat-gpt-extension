@@ -31,7 +31,7 @@ const handleExistingMessages = (mutation) => {
           // Prevents the responseHelper from causing overflow
           descendant.style.overflowX = "visible";
           const firstChild = descendant.firstChild;
-          if(!firstChild) return;
+          if (!firstChild) return;
           addResponseHelper(firstChild);
         });
       }
@@ -54,7 +54,8 @@ const handleNewMessage = (mutation) => {
 };
 
 const addResponseHelper = (firstChild) => {
-  firstChild.childNodes.forEach((p) => {
+  const paragraphs = firstChild.querySelectorAll("p");
+  paragraphs.forEach((p) => {
     if (p.nodeName === "P") {
       // Create a button absolutely positioned right of the paragraph
       p.style.position = "relative";
