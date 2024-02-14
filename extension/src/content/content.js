@@ -7,7 +7,7 @@ import FetchController from "./autocomplete/FetchController";
 import { fetchStates } from "./autocomplete/constants/fetchStates";
 import { addPrompt } from "./prompts/addPrompt";
 import { expandTextareas } from "./ghostText/expandTextareas";
-import { setUpResponseHighlighting } from "./responseOptions/setUpResponseHighlighting";
+import { setUpResponseHelper } from "./responseOptions/setUpResponseHelper";
 
 console.log("content.js 🚀🚀");
 
@@ -100,7 +100,7 @@ function init() {
   }
 
   // Set other listeners
-  setUpResponseHighlighting();
+  setUpResponseHelper();
 }
 
 // Resets any spans and then updates the innerText to match the wiseTextarea text

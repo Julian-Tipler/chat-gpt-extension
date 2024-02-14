@@ -1,6 +1,6 @@
 import { ResponseHelper } from "./components/ResponseHelper";
 
-export const setUpResponseHighlighting = () => {
+export const setUpResponseHelper = () => {
   const main = document.querySelector("main");
   const config = {
     childList: true,
@@ -31,6 +31,7 @@ const handleExistingMessages = (mutation) => {
           // Prevents the responseHelper from causing overflow
           descendant.style.overflowX = "visible";
           const firstChild = descendant.firstChild;
+          if(!firstChild) return;
           addResponseHelper(firstChild);
         });
       }
@@ -41,6 +42,7 @@ const handleExistingMessages = (mutation) => {
 const handleNewMessage = (mutation) => {
   if (mutation.type === "attributes" && mutation.attributeName === "class") {
     const firstChild = mutation.target;
+    firstChild;
     // Checks if the result has streamed and the responseHelper can be added
     if (
       mutation.oldValue.split(" ").includes("result-streaming") &&

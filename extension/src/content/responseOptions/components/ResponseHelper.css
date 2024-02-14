@@ -13,6 +13,7 @@
   opacity: 0.5;
   z-index: 1;
   margin-left: 15px;
+  min-width: 8px;
 }
 
 .button-container {
