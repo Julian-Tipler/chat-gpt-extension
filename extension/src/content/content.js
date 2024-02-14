@@ -1,3 +1,4 @@
+import "./index.css";
 import { syncGhostText } from "./ghostText/syncGhostText";
 import { resetAutocompleteText } from "./autocomplete/resetAutocompleteText";
 import { processStream } from "./autocomplete/helpers/processStream";
@@ -6,12 +7,18 @@ import FetchController from "./autocomplete/FetchController";
 import { fetchStates } from "./autocomplete/constants/fetchStates";
 import { addPrompt } from "./prompts/addPrompt";
 import { expandTextareas } from "./ghostText/expandTextareas";
+import { setUpResponseHighlighting } from "./responseOptions/setUpResponseHighlighting";
 
-console.log("content.js 🚀");
+console.log("content.js 🚀🚀");
+
 const apiUrl = import.meta.env.VITE_API_URL + "/functions/v1/autocomplete";
 const accessToken = import.meta.env.VITE_WISE_API_TOKEN;
 
 window.addEventListener("load", () => {
+  init();
+});
+
+function init() {
   // existing elements
   const textarea = document.querySelector("textarea");
   const parent = textarea ? textarea.parentElement : null;
@@ -36,15 +43,20 @@ window.addEventListener("load", () => {
 
   // Check if a textarea element was found and set listeners
   if (textarea && parent && form) {
-    setListeners({ textarea, wiseTextarea, parent, form });
+    setAutocompleteListeners({
+      textarea,
+      wiseTextarea,
+      parent,
+      form,
+    });
   } else {
     console.log("No textarea found on the page.");
   }
 
-  function setListeners({ textarea, wiseTextarea, form }) {
+  // Sets listeners for autocomplete functionality
+  function setAutocompleteListeners({ textarea, wiseTextarea, form }) {
     // Resets the lastInput, wiseTextarea, and fetchState
     textarea.addEventListener("scroll", function() {
-      // both
       wiseTextarea.style.transform = "translateY(" + -this.scrollTop + "px)";
     });
     textarea.addEventListener("input", () => {
@@ -86,7 +98,10 @@ window.addEventListener("load", () => {
       });
     }, 200);
   }
-});
+
+  // Set other listeners
+  setUpResponseHighlighting();
+}
 
 // Resets any spans and then updates the innerText to match the wiseTextarea text
 // TODO maybe I should include space/paragraph logic here?
