@@ -55,6 +55,12 @@ const ExplainButton = (text) => {
           textarea.value += "Tell me more:" + "\n\n" + text;
         }
         textarea.dispatchEvent(new Event("input", { bubbles: true }));
+        const submitButton = document.querySelector(
+          "button[data-testid=send-button]"
+        );
+        if(submitButton) {
+          submitButton.click()
+        }
         textarea.focus();
       }
     };
