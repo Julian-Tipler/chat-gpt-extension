@@ -9,7 +9,16 @@ import { addPrompt } from "./prompts/addPrompt";
 import { expandTextareas } from "./ghostText/expandTextareas";
 import { setUpResponseHighlighting } from "./responseOptions/setUpResponseHighlighting";
 
-console.log("content.js 🚀🚀🚀");
+console.log("content.js 🚀🚀");
+// (function loadFontAwesome() {
+//   const link = document.createElement("link");
+//   link.href =
+//     "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css";
+//   link.rel = "stylesheet";
+//   document.head.appendChild(link);
+// })();
+// console.log("content.js 🚀🚀🚀");
+
 const apiUrl = import.meta.env.VITE_API_URL + "/functions/v1/autocomplete";
 const accessToken = import.meta.env.VITE_WISE_API_TOKEN;
 

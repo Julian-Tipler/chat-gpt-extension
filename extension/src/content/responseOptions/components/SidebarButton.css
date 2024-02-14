@@ -27,28 +27,40 @@
 }
 
 .explain-button {
-  padding: 10px 10px;
+  height: 20px;
+  width: 20px;
   border: none;
   border-radius: 10px;
   background-color: yellow;
   color: white;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .explain-button:hover {
   background-color: #e0e000;
 }
 
 .copy-button {
-  padding: 10px 10px;
+  height: 20px;
+  width: 20px;
   border: none;
   border-radius: 10px;
   background-color: green;
   color: white;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-
 .copy-button:hover {
   background-color: #007a00;
+}
+
+.button-icon {
+  padding: "0px";
+  font-size: "4px";
 }

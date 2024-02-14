@@ -4,7 +4,7 @@ export const setUpResponseHighlighting = () => {
   // Need to do a mutation observer that checks if new paragraphs are added.
   // If they are, append the clickable button to those paragraphs
 
-  const messages = document.querySelector('[role="presentation"]').firstChild;
+  const main = document.querySelector("main");
   const config = {
     childList: true,
     subtree: true,
@@ -13,7 +13,7 @@ export const setUpResponseHighlighting = () => {
   };
 
   const observer = new MutationObserver(callback);
-  observer.observe(messages, config);
+  observer.observe(main, config);
 
   // also need to observe when a message is finished (results-streaming class disappears)
 };

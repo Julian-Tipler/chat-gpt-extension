@@ -1,5 +1,4 @@
 import "./SidebarButton.css";
-import "./OtherCss.css";
 
 export function Sidebar(text) {
   const render = () => {
@@ -31,8 +30,6 @@ export function Sidebar(text) {
     buttonContainer.appendChild(copyButton);
 
     sidebar.appendChild(buttonContainer);
-    // const text = document.createTextNode(text);
-    // sidebar.appendChild(text);
 
     return sidebar;
   };
@@ -68,6 +65,9 @@ const CopyButton = (text) => {
   const render = () => {
     const copyButton = document.createElement("button");
     copyButton.classList.add("copy-button");
+    const icon = document.createElement("i");
+    icon.classList.add("button-icon", "fas", "fa-copy");
+    copyButton.appendChild(icon);
 
     copyButton.onclick = (e) => {
       e.preventDefault();
