@@ -9,8 +9,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: "index.html", // The entry point for the React app
-        content: "src/content/content.js", // The entry point for the content script
-        background: "src/background/background.js", // The entry point for the background script
+        content: "content/content.js", // The entry point for the content script
+        background: "background/background.js", // The entry point for the background script
       },
       output: {
         entryFileNames: (chunkInfo) => {

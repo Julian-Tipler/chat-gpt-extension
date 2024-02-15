@@ -1,4 +1,8 @@
 /*
+  CSS reset
+*/
+
+/*
   1. Use a more-intuitive box-sizing model.
 */
 *,
@@ -61,6 +65,9 @@ h6 {
   isolation: isolate;
 }
 
+/*
+  Extension styling
+*/
 .wise-textarea {
   position: absolute;
   width: 100%;
