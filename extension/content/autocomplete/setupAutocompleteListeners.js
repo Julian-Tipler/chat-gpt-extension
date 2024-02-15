@@ -1,7 +1,7 @@
-import { expandTextareas } from "../ghostText/expandTextareas";
-import { syncGhostText } from "../ghostText/syncGhostText";
+import { expandTextareas } from "./ghostText/expandTextareas";
+import { syncGhostText } from "./ghostText/syncGhostText";
 import FetchController from "./FetchController";
-import { addAutocompleteTextToTextArea } from "./addAutocompleteTextToTextArea";
+import { addAutocompleteTextToTextArea } from "./helpers/addAutocompleteTextToTextArea";
 import { fetchStates } from "./constants/fetchStates";
 import { processStream } from "./helpers/processStream";
 import { resetAutocompleteText } from "./helpers/resetAutocompleteText";

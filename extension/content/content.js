@@ -1,5 +1,5 @@
 import "./index.css";
-import { setupResponseHelper } from "./responseOptions/setupResponseHelper";
+import { setupResponseHelper } from "./responseHelper/setUpResponseHelper";
 import { setupAutocompleteListeners } from "./autocomplete/setupAutocompleteListeners";
 import { setupPromptListener } from "./prompts/setupResponseListener";
 
