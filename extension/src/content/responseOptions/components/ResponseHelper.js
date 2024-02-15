@@ -1,3 +1,4 @@
+import { showToast } from "../../components/toast";
 import { copyIcon, explainIcon } from "../../icons";
 import "./ResponseHelper.css";
 
@@ -11,15 +12,15 @@ export function ResponseHelper(text) {
 
     responseHelper.addEventListener("mouseenter", () => {
       buttonContainer.style.visibility = "visible";
+      buttonContainer.style.width = "22px";
       responseHelper.style.opacity = "1";
       responseHelper.style.minHeight = "100px";
-      buttonContainer.style.width = "22px";
     });
     responseHelper.addEventListener("mouseleave", () => {
       buttonContainer.style.visibility = "hidden";
-      responseHelper.style.opacity = "0.5";
-      responseHelper.style.minHeight = "0px";
       buttonContainer.style.width = "0px";
+      responseHelper.style.opacity = "0.1";
+      responseHelper.style.minHeight = "0px";
     });
 
     const explainButton = ExplainButton(text).render();
@@ -41,7 +42,7 @@ export function ResponseHelper(text) {
 const ExplainButton = (text) => {
   const render = () => {
     const explainButton = document.createElement("button");
-    explainButton.classList.add("explain-button", "sidebar-button");
+    explainButton.classList.add("explain-button", "response-helper-button");
     explainButton.innerHTML = explainIcon;
 
     explainButton.onclick = (e) => {
@@ -50,16 +51,16 @@ const ExplainButton = (text) => {
       if (textarea) {
         const currentText = textarea.value.trim();
         if (currentText !== "") {
-          textarea.value += "\n\n" + "Tell me more:" + "\n\n" + text;
+          textarea.value += "\n\n" + "Please explain further:" + "\n\n" + text;
         } else {
-          textarea.value += "Tell me more:" + "\n\n" + text;
+          textarea.value += "Please explain further:" + "\n\n" + text;
         }
         textarea.dispatchEvent(new Event("input", { bubbles: true }));
         const submitButton = document.querySelector(
           "button[data-testid=send-button]"
         );
-        if(submitButton) {
-          submitButton.click()
+        if (submitButton) {
+          submitButton.click();
         }
         textarea.focus();
       }
@@ -72,8 +73,9 @@ const ExplainButton = (text) => {
 const CopyButton = (text) => {
   const render = () => {
     const copyButton = document.createElement("button");
-    copyButton.classList.add("copy-button", "sidebar-button");
+    copyButton.classList.add("copy-button", "response-helper-button");
     copyButton.innerHTML = copyIcon;
+    copyButton.addEventListener("click", () => showToast("Copied to clipboard!"));
 
     copyButton.onclick = (e) => {
       e.preventDefault();

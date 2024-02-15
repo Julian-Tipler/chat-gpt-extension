@@ -10,10 +10,10 @@
   right: 0;
   height: 100%;
   border-radius: 5px;
-  opacity: 0.5;
+  opacity: 0.1;
   z-index: 1;
   margin-left: 15px;
-  min-width: 8px;
+  min-width: 7px;
 }
 
 .button-container {
@@ -28,13 +28,13 @@
   transition: width 0.3s ease, height 0.3s ease, transform 0.3s ease;
 }
 
-.sidebar-button {
+.response-helper-button {
   height: 21px;
   width: 21px;
   border: none;
   border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.2s ease;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -45,20 +45,19 @@
   color: white;
 }
 .explain-button:hover {
-  background-color: #15b874;
+  background-color: #14aa6b;
 }
 
 .copy-button {
-  background-color: rgb(172, 113, 5);
+  background-color: rgb(255, 255, 255);
   color: white;
 }
 .copy-button:hover {
-  background-color: rgb(152, 99, 2);
+  background-color: rgb(224, 224, 224);
 }
 
-.sidebar-button > svg {
-  height: 16px;
-  width: 16px;
-  fill: white;
-  stroke-width: 50%;
+.response-helper-button > svg {
+  height: 14px;
+  width: 14px;
+  fill: black;
 }
