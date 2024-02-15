@@ -27,7 +27,7 @@ Fellow dev @zoeschmitt and I use ChatGPT at our jobs every single day. While the
   
 ## Installation
 
-1. Clone the repository:
+1. Clone the repository:1
 
    ```bash
    git clone https://github.com/Julian-Tipler/chat-gpt-extension.git
