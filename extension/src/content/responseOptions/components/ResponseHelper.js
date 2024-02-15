@@ -12,15 +12,15 @@ export function ResponseHelper(text) {
 
     responseHelper.addEventListener("mouseenter", () => {
       buttonContainer.style.visibility = "visible";
+      buttonContainer.style.width = "22px";
       responseHelper.style.opacity = "1";
       responseHelper.style.minHeight = "100px";
-      buttonContainer.style.width = "22px";
     });
     responseHelper.addEventListener("mouseleave", () => {
       buttonContainer.style.visibility = "hidden";
-      responseHelper.style.opacity = "0.5";
-      responseHelper.style.minHeight = "0px";
       buttonContainer.style.width = "0px";
+      responseHelper.style.opacity = "0.1";
+      responseHelper.style.minHeight = "0px";
     });
 
     const explainButton = ExplainButton(text).render();
@@ -42,7 +42,7 @@ export function ResponseHelper(text) {
 const ExplainButton = (text) => {
   const render = () => {
     const explainButton = document.createElement("button");
-    explainButton.classList.add("explain-button", "sidebar-button");
+    explainButton.classList.add("explain-button", "response-helper-button");
     explainButton.innerHTML = explainIcon;
 
     explainButton.onclick = (e) => {
@@ -73,7 +73,7 @@ const ExplainButton = (text) => {
 const CopyButton = (text) => {
   const render = () => {
     const copyButton = document.createElement("button");
-    copyButton.classList.add("copy-button", "sidebar-button");
+    copyButton.classList.add("copy-button", "response-helper-button");
     copyButton.innerHTML = copyIcon;
     copyButton.addEventListener("click", () => showToast("Copied to clipboard!"));
 
