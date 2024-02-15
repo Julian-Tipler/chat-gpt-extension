@@ -1,6 +1,6 @@
 import { ResponseHelper } from "./components/ResponseHelper";
 
-export const setUpResponseHelper = () => {
+export const setupResponseHelper = () => {
   const main = document.querySelector("main");
   const config = {
     childList: true,
