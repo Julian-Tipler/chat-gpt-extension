@@ -1,6 +1,6 @@
 import "./index.css";
 import { syncGhostText } from "./ghostText/syncGhostText";
-import { resetAutocompleteText } from "./autocomplete/resetAutocompleteText";
+import { resetAutocompleteText } from "./autocomplete/helpers/resetAutocompleteText";
 import { processStream } from "./autocomplete/helpers/processStream";
 import { addAutocompleteTextToTextArea } from "./autocomplete/addAutocompleteTextToTextArea";
 import FetchController from "./autocomplete/FetchController";
