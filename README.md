@@ -19,6 +19,9 @@ Fellow dev @zoeschmitt and I use ChatGPT at our jobs every single day. While the
 ### Presaved prompts  
   <img src="https://github.com/Julian-Tipler/chat-gpt-extension/assets/59591817/58c014f8-d555-4d19-a7e8-e57900049eea" alt="presaved prompt demonstration" width="600" />
 
+### Response helper
+  <img src="https://github.com/Julian-Tipler/chat-gpt-extension/assets/59591817/98cdfae3-3164-4819-8205-4861047d9fc2" alt="response helper demonstration" width="600" />
+
 ## Technologies
 * ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 * ![Google Chrome](https://img.shields.io/badge/Google%20Chrome-4285F4?style=for-the-badge&logo=GoogleChrome&logoColor=white)
